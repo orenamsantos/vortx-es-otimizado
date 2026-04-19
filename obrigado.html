@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>VORTX | Compra Confirmada</title>
+<title>VORTX — Compra Confirmada</title>
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -115,7 +115,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   <div class="divider fade-up d5" id="upsell-section" style="opacity:0;transition:opacity 0.8s ease;">⚠ Espera — lee esto antes de salir</div>
   <div class="upsell">
     <div class="upsell-alert fade-up d5">
-      <p>El protocolo funciona, pero <strong>tarda 14 a 21 días para que sientas la primera diferencia real</strong> — son 21 noches esperando — <em>a menos que forces los vasos a abrirse esta noche.</em></p>
+      <p>El protocolo funciona, pero <strong>ya está funcionando — pero hay hombres que quieren resultados esta misma noche</strong>  <em></em></p>
     </div>
     <div class="upsell-timer fade-up d5">
       <div class="upsell-timer-badge">⏱ Oferta expira en <span id="upsell-timer">05:00</span></div>
@@ -128,8 +128,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="ingredients fade-up d6">
       <div class="ingredients-title">Lo que abre los vasos</div>
       <div class="ingredients-grid">
-        <div class="ingredient"><div class="ingredient-icon">🫀</div><div><div class="ingredient-name">Suco de Beterraba</div><div class="ingredient-role">Vasodilatador peniano natural</div></div></div>
-        <div class="ingredient"><div class="ingredient-icon">🍉</div><div><div class="ingredient-name">Extrato de Melancia</div><div class="ingredient-role">Precursor de citrulina (dilata vasos)</div></div></div>
+        <div class="ingredient"><div class="ingredient-icon">🫀</div><div><div class="ingredient-name">Jugo de Remolacha</div><div class="ingredient-role">Vasodilatador peniano natural</div></div></div>
+        <div class="ingredient"><div class="ingredient-icon">🍉</div><div><div class="ingredient-name">Extracto de Sandía</div><div class="ingredient-role">Precursor de citrulina (dilata vasos)</div></div></div>
         <div class="ingredient"><div class="ingredient-icon">🧬</div><div><div class="ingredient-name">L-Arginina</div><div class="ingredient-role">Dispara óxido nítrico y llena de sangre</div></div></div>
         <div class="ingredient"><div class="ingredient-icon">🔒</div><div><div class="ingredient-name">Ingrediente #4</div><div class="ingredient-role">El catalizador (revelado en el acceso)</div></div></div>
       </div>
@@ -179,14 +179,14 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   var purchaseValue = Number(p.get('value')) || 67;
   var purchasePlan = p.get('plan') || 'vitalicio';
   var purchaseProduct = purchasePlan === 'mensal' ? 'vortx_mensal' : 'vortx_protocol';
-  if(window.vortxTrack) vortxTrack('purchase',{value:purchaseValue,currency:'BRL',product:purchaseProduct,plan:purchasePlan});
+  if(window.vortxTrack) vortxTrack('purchase',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
   // Track upsell view
   if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:47});
 
   document.getElementById('btn-upsell').addEventListener('click',function(e){
     e.preventDefault();
     // TODO: processar pagamento do Soro, depois redirecionar
-    if(window.vortxTrack) vortxTrack('upsell_accept',{value:47,currency:'BRL',product:'soro_120'});
+    if(window.vortxTrack) vortxTrack('upsell_accept',{value:9,currency:'USD',product:'soro_120'});
     window.location.href='cross-sell.html?soro=sim'+(n?'&name='+encodeURIComponent(n):'');
   });
   document.getElementById('btn-skip').addEventListener('click',function(){
