@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VORTX | Acesse Seu Protocolo</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0B12;--card:rgba(255,255,255,.04);--gold:#C9A84C;--gold-d:#A68B3A;--gold-sub:rgba(201,168,76,.06);--txt:#F0EDE6;--txt2:#9A978F;--txt3:#5C5A54;--brd:rgba(255,255,255,.06);--green:#4CAF6A;--r-card:20px;--r-btn:50px;--r-sm:12px;--ff-d:'Playfair Display',Georgia,serif;--ff-b:'Inter',-apple-system,sans-serif;--ff-m:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh;overflow-x:hidden;display:flex;align-items:center;justify-content:center}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(22,33,62,.3) 0,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(201,168,76,.04) 0,transparent 50%);pointer-events:none;z-index:0}
+.page{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:60px 20px;text-align:center}
+
+.access-icon{width:88px;height:88px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin:0 auto 24px;font-size:2.2rem;animation:popIn .6s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{transform:scale(0);opacity:0}to{transform:scale(1);opacity:1}}
+
+h1{font-family:var(--ff-d);font-weight:700;font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;margin-bottom:8px}
+h1 span{color:var(--gold)}
+.sub{font-size:.95rem;color:var(--txt2);margin-bottom:32px;line-height:1.65}
+
+.access-card{padding:24px;background:var(--card);border:1px solid var(--brd);border-radius:var(--r-card);margin-bottom:24px;text-align:left}
+.access-card-title{font-size:.7rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);margin-bottom:14px;text-align:center}
+.access-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.access-item:last-child{border-bottom:none}
+.access-item-icon{font-size:1rem;flex-shrink:0}
+.access-item-label{font-size:.88rem;color:var(--txt);flex:1}
+.access-item-status{font-family:var(--ff-m);font-size:.68rem;font-weight:600;color:var(--green);background:rgba(76,175,106,.08);padding:3px 8px;border-radius:var(--r-btn);letter-spacing:.5px}
+
+.btn{display:flex;align-items:center;justify-content:center;padding:18px 40px;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--bg);font-family:var(--ff-b);font-weight:700;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:var(--r-btn);cursor:pointer;transition:all .25s;width:100%;max-width:400px;margin:0 auto;min-height:58px;position:relative;overflow:hidden;box-shadow:0 6px 28px rgba(201,168,76,.25);text-decoration:none}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(201,168,76,.3)}
+.btn::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 4s ease-in-out infinite;will-change:transform}
+@keyframes shimmer{0%{transform:translateX(-100%)}40%,100%{transform:translateX(100%)}}
+
+.note{font-size:.78rem;color:var(--txt3);margin-top:16px;line-height:1.5}
+.note strong{color:var(--txt2)}
+
+.footer{margin-top:40px}
+.footer-logo{font-family:var(--ff-b);font-weight:700;font-size:.9rem;letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.footer-logo span{display:inline-block;width:5px;height:5px;background:var(--gold);border-radius:50%;margin-left:2px;vertical-align:middle}
+.footer p{font-size:.7rem;color:var(--txt3)}
+
+.fade-up{opacity:0;transform:translateY(24px);animation:fadeUp .6s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.15s}.d2{animation-delay:.3s}.d3{animation-delay:.45s}.d4{animation-delay:.6s}
+</style>
+  <script>window.vortxTrack=function(e,p){(window._vtq=window._vtq||[]).push({e:e,p:p||{}})};(window.requestIdleCallback||function(c){setTimeout(c,2000)})(function(){var s=document.createElement("script");s.src="js/tracking.min.js";document.body.appendChild(s)})</script>
+  <noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1492285522546817&ev=PageView&noscript=1"/></noscript>
+</head>
+<body>
+<div class="page">
+
+  <div class="access-icon fade-up">⚡</div>
+
+  <h1 class="fade-up d1">Tudo liberado, <span id="user-name">Campeón</span>.</h1>
+  <p class="sub fade-up d1">Tu protocolo está pronto, acesse ahora e comece hoje.</p>
+
+  <div class="access-card fade-up d2">
+    <div class="access-card-title">Tus productos</div>
+    <div class="access-item">
+      <span class="access-item-icon">📋</span>
+      <span class="access-item-label">Protocolo de Reversão Vascular VORTX</span>
+      <span class="access-item-status">LIBERADO</span>
+    </div>
+    <div class="access-item" id="item-soro" style="display:none">
+      <span class="access-item-icon">🧪</span>
+      <span class="access-item-label">Soro Vasodilatador de 120 Minutos</span>
+      <span class="access-item-status">LIBERADO</span>
+    </div>
+    <div class="access-item" id="item-ignicion" style="display:none">
+      <span class="access-item-icon">🔥</span>
+      <span class="access-item-label">Protocolo Ignición Vascular</span>
+      <span class="access-item-status">LIBERADO</span>
+    </div>
+  </div>
+
+  <a href="#" class="btn fade-up d3" id="btn-access">ACCEDER A MI PROTOCOLO AHORA</a>
+
+  <p class="note fade-up d4">O acesso también fue enviado pro seu WhatsApp e email. <strong>Se não encontrar, confira o spam.</strong></p>
+
+  <div class="footer fade-up d4">
+    <div class="footer-logo">VORTX<span></span></div>
+    <p>Protocolo de Reversão Vascular Masculina</p>
+  </div>
+
+</div>
+<script>
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  const n = p.get('name');
+  if (n) document.getElementById('user-name').textContent = decodeURIComponent(n);
+
+  // Mostrar produtos comprados baseado em params ou localStorage
+  // Por enquanto mostra baseado em referrer ou params
+  const soro = p.get('soro');
+  const ignicion = p.get('ignicion');
+  if (soro === 'sim') document.getElementById('item-soro').style.display = 'flex';
+  if (ignicion === 'sim') document.getElementById('item-ignicion').style.display = 'flex';
+
+  // Track funnel complete
+  if(window.vortxTrack) vortxTrack('funnel_complete',{products_purchased: [
+    'vortx_protocol',
+    soro==='sim' ? 'soro_120' : null,
+    ignicion==='sim' ? 'protocolo_ignicion' : null
+  ].filter(Boolean)});
+
+  document.getElementById('btn-access').addEventListener('click', function(e){
+    e.preventDefault();
+    // TODO: SUBSTITUIR por el link da área de membros
+    alert('Conecta aquí el link del área de miembros');
+  });
+})();
+</script>
+<script src="https://echo.ticto.app/ticto-echo.min.js" defer></script>
+</body>
+</html>

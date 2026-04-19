@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VORTX — Espera, última oportunidad</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0B0B12;--card:rgba(255,255,255,.04);--gold:#C9A84C;--gold-l:#DFC373;--gold-d:#A68B3A;--gold-sub:rgba(201,168,76,.06);--txt:#F0EDE6;--txt2:#9A978F;--txt3:#5C5A54;--brd:rgba(255,255,255,.06);--green:#4CAF6A;--red:#C44B4B;--amber:#D4940A;--r-card:20px;--r-btn:50px;--r-sm:12px;--ff-d:'Playfair Display',Georgia,serif;--ff-b:'Inter',-apple-system,sans-serif;--ff-m:'JetBrains Mono',monospace}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+html{font-size:16px;-webkit-font-smoothing:antialiased}
+body{font-family:var(--ff-b);background:var(--bg);color:var(--txt);line-height:1.6;min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse at 10% 20%,rgba(22,33,62,.3) 0,transparent 50%),radial-gradient(ellipse at 90% 80%,rgba(201,168,76,.04) 0,transparent 50%);pointer-events:none;z-index:0}
+.page{position:relative;z-index:1;max-width:540px;margin:0 auto;padding:0 20px 60px}
+.header{text-align:center;padding:48px 0 28px}
+.header .icon{font-size:2.8rem;width:72px;height:72px;display:flex;align-items:center;justify-content:center;background:rgba(196,75,75,.08);border:1px solid rgba(196,75,75,.2);border-radius:50%;margin:0 auto 20px}
+.header .tag{display:inline-block;font-family:var(--ff-m);font-size:.6rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:10px;padding:4px 12px;border:1px solid rgba(196,75,75,.3);border-radius:var(--r-btn)}
+.header h1{font-family:var(--ff-d);font-weight:700;font-size:clamp(1.4rem,5vw,1.9rem);line-height:1.25;margin-bottom:10px}
+.header h1 em{color:#F0D78C;font-style:normal}
+.header .sub{font-size:.9rem;color:var(--txt2);line-height:1.65;max-width:440px;margin:0 auto}
+.alert-box{padding:20px;background:rgba(196,75,75,.06);border:1px solid rgba(196,75,75,.2);border-radius:var(--r-card);margin-bottom:28px}
+.alert-box p{font-size:.92rem;color:var(--txt);line-height:1.7}
+.alert-box strong{color:var(--red)}
+.offer-card{background:var(--card);border:1px solid rgba(201,168,76,.3);border-radius:var(--r-card);padding:24px;margin-bottom:24px}
+.offer-card-title{font-size:.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:var(--txt3);text-align:center;margin-bottom:16px}
+.offer-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid var(--brd)}
+.offer-item:last-child{border-bottom:none}
+.offer-item-icon{font-size:1rem;flex-shrink:0}
+.offer-item-text{font-size:.88rem;color:var(--txt2)}
+.offer-item-text strong{color:var(--txt)}
+.price-block{text-align:center;margin-bottom:20px}
+.price-old{font-family:var(--ff-m);font-size:1rem;color:var(--txt3);text-decoration:line-through;display:block;margin-bottom:4px}
+.price-tag{font-family:var(--ff-m);font-size:1rem;color:var(--txt3);margin-bottom:4px}
+.price-new{font-family:var(--ff-m);font-size:3rem;font-weight:700;color:var(--gold);line-height:1}
+.price-new small{font-size:1rem;font-weight:400;color:var(--txt3)}
+.price-sub{font-size:.75rem;color:var(--green);font-weight:600;margin-top:6px}
+.price-note{font-size:.7rem;color:var(--txt3);margin-top:4px}
+.guarantee{padding:16px 18px;background:var(--card);border:1px solid rgba(201,168,76,.2);border-radius:var(--r-card);text-align:center;margin-bottom:20px}
+.guarantee-icon{font-size:1.4rem;margin-bottom:4px}
+.guarantee-title{font-weight:600;font-size:.85rem;margin-bottom:4px}
+.guarantee-text{font-size:.78rem;color:var(--txt2);line-height:1.6}
+.btn{display:flex;align-items:center;justify-content:center;padding:18px 40px;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--bg);font-family:var(--ff-b);font-weight:700;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;border:none;border-radius:var(--r-btn);cursor:pointer;transition:all .25s;width:100%;max-width:480px;margin:0 auto;min-height:60px;position:relative;overflow:hidden;box-shadow:0 6px 28px rgba(201,168,76,.25);text-decoration:none;flex-direction:column;line-height:1.3;display:flex}
+.btn:hover{transform:translateY(-2px);box-shadow:0 10px 36px rgba(201,168,76,.3)}
+.btn::after{content:'';position:absolute;top:0;left:0;width:100%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 4s ease-in-out infinite;will-change:transform}
+@keyframes shimmer{0%{transform:translateX(-100%)}40%,100%{transform:translateX(100%)}}
+.btn-price{font-size:1.4rem;margin-top:2px}
+.btn-sub{font-size:.72rem;color:var(--txt3);text-align:center;margin-top:10px}
+.btn-skip{display:block;text-align:center;margin:20px auto 0;font-size:.78rem;color:var(--txt3);cursor:pointer;letter-spacing:.3px;transition:color .25s;border:none;background:none;font-family:var(--ff-b);padding:8px;width:100%;text-decoration:none}
+.btn-skip:hover{color:var(--txt2)}
+.footer{text-align:center;padding:32px 0 20px;border-top:1px solid var(--brd);margin-top:40px}
+.footer-logo{font-family:var(--ff-b);font-weight:700;font-size:.9rem;letter-spacing:6px;color:var(--gold);text-transform:uppercase;margin-bottom:6px}
+.footer-logo span{display:inline-block;width:5px;height:5px;background:var(--gold);border-radius:50%;margin-left:2px;vertical-align:middle}
+.footer p{font-size:.7rem;color:var(--txt3)}
+.fade-up{opacity:0;transform:translateY(24px);animation:fadeUp .6s ease forwards}
+@keyframes fadeUp{to{opacity:1;transform:translateY(0)}}
+.d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}
+</style>
+<script>window.vortxTrack=function(e,p){(window._vtq=window._vtq||[]).push({e:e,p:p||{}})}</script>
+<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1492285522546817&ev=PageView&noscript=1"/></noscript>
+</head>
+<body>
+<div class="page">
+
+  <div class="header fade-up">
+    <div class="icon">⏳</div>
+    <div class="tag">ESPERA — ÚLTIMA OPORTUNIDAD</div>
+    <h1>¿Seguro que vas a esperar <em>21 días</em> sin hacer nada más?</h1>
+    <p class="sub">Entendemos que el Suero no era para ti. Pero hay una opción más pequeña que nadie rechaza — y que acelera el protocolo desde el día 1.</p>
+  </div>
+
+  <div class="alert-box fade-up d1">
+    <p>El protocolo de reversión vascular que compraste funciona. <strong>Pero funciona más rápido cuando el cuerpo recibe el estímulo correcto desde el primer día.</strong> Esta es la versión mínima de ese estímulo — al precio que nadie puede decir que no.</p>
+  </div>
+
+  <div class="offer-card fade-up d2">
+    <div class="offer-card-title">Lo que estás dejando ir por $ 5</div>
+    <div class="offer-item">
+      <span class="offer-item-icon">🌡️</span>
+      <span class="offer-item-text"><strong>Rutina termogénica de 5 minutos</strong> — activa el metabolismo y empieza a quemar grasa estrogénica desde el día 1</span>
+    </div>
+    <div class="offer-item">
+      <span class="offer-item-icon">🌙</span>
+      <span class="offer-item-text"><strong>Stack nocturno de recuperación</strong> — 3 compuestos baratos que fuerzan la producción de testosterona mientras duermes</span>
+    </div>
+    <div class="offer-item">
+      <span class="offer-item-icon">📊</span>
+      <span class="offer-item-text"><strong>Checklist semanal de progreso</strong> — señales del cuerpo que confirman que el protocolo está funcionando, antes de verlo en el espejo</span>
+    </div>
+  </div>
+
+  <div class="price-block fade-up d3">
+    <span class="price-old">Antes: $ 27</span>
+    <span class="price-tag">Solo ahora:</span>
+    <div class="price-new"><small>$</small> 5</div>
+    <div class="price-sub">Menos que un refresco — y acelera tus resultados</div>
+    <div class="price-note">Pago único • Acceso inmediato</div>
+  </div>
+
+  <div class="guarantee fade-up d3">
+    <div class="guarantee-icon">🛡️</div>
+    <div class="guarantee-title">Garantía de 30 días incluida</div>
+    <p class="guarantee-text">Si no acelera tus resultados, devuelvo cada centavo. Sin preguntas.</p>
+  </div>
+
+  <div class="fade-up d4">
+    <a href="#" class="btn" id="btn-downsell">
+      SÍ, LO QUIERO POR
+      <span class="btn-price">$ 5</span>
+    </a>
+    <p class="btn-sub">Acceso inmediato junto con tu protocolo VORTX</p>
+    <button class="btn-skip" id="btn-skip-downsell">No, prefiero ir más lento →</button>
+  </div>
+
+  <div class="footer fade-up d5">
+    <div class="footer-logo">VORTX<span></span></div>
+    <p>Protocolo de Reversión Vascular Masculina</p>
+  </div>
+
+</div>
+
+<script>
+(function(){
+  const p = new URLSearchParams(window.location.search);
+  const n = p.get('name');
+
+  if(window.vortxTrack) vortxTrack('downsell_view', {product:'protocolo_ignicion_downsell', value:5});
+
+  document.getElementById('btn-downsell').addEventListener('click', function(e){
+    e.preventDefault();
+    if(window.vortxTrack) vortxTrack('downsell_accept', {value:5, currency:'USD', product:'protocolo_ignicion_downsell'});
+    // TODO: processar pagamento $5, redirecionar para acesso
+    window.location.href = 'acesso.html?ignicion=sim' + (n ? '&name=' + encodeURIComponent(n) : '');
+  });
+
+  document.getElementById('btn-skip-downsell').addEventListener('click', function(){
+    if(window.vortxTrack) vortxTrack('downsell_decline', {product:'protocolo_ignicion_downsell'});
+    window.location.href = 'acesso.html' + (n ? '?name=' + encodeURIComponent(n) : '');
+  });
+})();
+</script>
+</body>
+</html>
