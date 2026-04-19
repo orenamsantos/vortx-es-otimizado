@@ -73,7 +73,7 @@
       headline: 'Você vai ver um número agora. <span class="highlight">Ele revela o quanto seus vasos já fecharam.</span>',
       getText: () => {
         const nome = state.userData.name || "tú";
-        return `${nome}, o sistema cruzou suas respostas com 17.483 diagnósticos. Alguns homens ficam em choque, outros sentem alívio. Prepara.`;
+        return `${nome}, el sistema cruzó tus respuestas con 17.483 diagnósticos. Algunos hombres quedan en shock, otros sienten alivio. Prepárate.`;
       },
       stat: "A maioria dos homens nunca soube que esse número existia.",
       cta: "VER MEU DIAGNÓSTICO",
@@ -371,7 +371,7 @@
           state.answers[step.id] = this.dataset.value;
           const triggerMsg = getTriggerMessage(step, this.dataset.value);
           if (triggerMsg) {
-            showShockScreen(triggerMsg, () => advanceStep());
+            showShockScreen(injectName(triggerMsg), () => advanceStep());
           } else {
             setTimeout(() => advanceStep(), 450);
           }
@@ -396,7 +396,7 @@
           if (btnContinue) btnContinue.disabled = selected.length < (step.minSelections || 1);
           if (step.triggers && step.triggers._any_except_nenhuma) {
             const hasNeg = selected.some((v) => v !== "nenhuma" && v !== "nenhum");
-            if (hasNeg) showInlineTrigger(step.triggers._any_except_nenhuma);
+            if (hasNeg) showInlineTrigger(injectName(step.triggers._any_except_nenhuma));
           }
         });
       });
@@ -529,7 +529,7 @@
 
   function showInlineTrigger(text) {
     const el = document.getElementById("step-trigger");
-    if (el) { el.textContent = text; el.classList.add("visible"); }
+    if (el) { el.textContent = injectName(text); el.classList.add("visible"); }
   }
 
   // ── ÁUDIO ─────────────────────────────────────────────────
@@ -587,7 +587,7 @@
     const screen = document.getElementById("interstitial");
     const emojiMatch = message.match(/^(🛑|⚠|⚠️|✓)/u);
     const emoji = emojiMatch ? emojiMatch[0] : "⚠️";
-    const bodyText = message.replace(/^(🛑|⚠|⚠️|✓)\s*/u, "");
+    const bodyText = injectName(message.replace(/^(🛑|⚠|⚠️|✓)\s*/u, ""));
     const isCritical = emoji === "🛑";
     const isAlert    = isCritical || emoji === "⚠️" || emoji === "⚠";
     const isPositive = emoji === "✓";
@@ -597,16 +597,16 @@
     let shockCta;
     if (isPositive) {
       shockCta = "CONTINUAR →";
-    } else if (message.includes("pene") || message.includes("erección") || message.includes("firme") || message.includes("firmeza") || message.includes("duro") || message.includes("ahí abajo")) {
-      shockCta = isCritical ? "ENTENDI, QUERO SABER SE TEM JEITO" : "VER O PRÓXIMO";
-    } else if (message.includes("músculo") || message.includes("noite") || message.includes("recuper") || message.includes("destroindo")) {
-      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
-    } else if (message.includes("estresse") || message.includes("esgotamento") || message.includes("cabeça") || message.includes("apagado")) {
-      shockCta = isCritical ? "ENTENDI, VER O RESTO" : "VER O PRÓXIMO";
-    } else if (message.includes("gordura") || message.includes("hormônio feminino") || message.includes("barriga")) {
-      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
+    } else if (message.includes("pene") || message.includes("erección") || message.includes("duro") || message.includes("abajo") || message.includes("pastilla")) {
+      shockCta = isCritical ? "ENTENDIDO, QUIERO SABER SI TIENE SOLUCIÓN" : "VER LO SIGUIENTE";
+    } else if (message.includes("músculo") || message.includes("grasa") || message.includes("barriga") || message.includes("hormona")) {
+      shockCta = isCritical ? "ENTENDIDO, CONTINUAR EL DIAGNÓSTICO" : "VER LO SIGUIENTE";
+    } else if (message.includes("testosterona") || message.includes("cortisol") || message.includes("energía") || message.includes("sueño")) {
+      shockCta = isCritical ? "ENTENDIDO, CONTINUAR EL DIAGNÓSTICO" : "VER LO SIGUIENTE";
+    } else if (message.includes("vaso") || message.includes("sangre") || message.includes("bloqueo") || message.includes("flujo")) {
+      shockCta = isCritical ? "ENTENDIDO, CONTINUAR EL DIAGNÓSTICO" : "VER LO SIGUIENTE";
     } else {
-      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
+      shockCta = isCritical ? "ENTENDIDO, CONTINUAR EL DIAGNÓSTICO" : "VER LO SIGUIENTE";
     }
 
     screen.innerHTML = `
