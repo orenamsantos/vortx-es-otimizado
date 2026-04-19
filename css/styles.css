@@ -1982,3 +1982,39 @@ a { color: var(--gold); text-decoration: none; }
   color: #e05555 !important;
   font-weight: 600 !important;
 }
+
+/* ── DDI SELECTOR ──────────────────────────────────────────── */
+.whatsapp-ddi-select {
+  background: var(--bg-input, rgba(255,255,255,0.05));
+  border: 1px solid var(--border-default, rgba(255,255,255,0.06));
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  color: var(--text-primary, #F0EDE6);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 0 10px;
+  height: 52px;
+  min-width: 110px;
+  cursor: pointer;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+}
+.whatsapp-ddi-select:focus {
+  border-color: var(--gold, #C9A84C);
+}
+.whatsapp-ddi-select option {
+  background: #1A1A2E;
+  color: #F0EDE6;
+}
+.whatsapp-input-wrapper {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+}
+.whatsapp-input-wrapper .whatsapp-field {
+  border-radius: 0 12px 12px 0 !important;
+  flex: 1;
+}

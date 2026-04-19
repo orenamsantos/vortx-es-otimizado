@@ -37,46 +37,46 @@
       afterStep: 4,
       emoji: "🔬",
       headline: '{name}, esto tiene nombre: <span class="highlight">bloqueo vascular peniano.</span>',
-      getText: () => "No es de la edad. Es obstrucción en los vasos que llevan sangre al pene. Ahora vamos a mapear el daño.",
-      stat: "Quien identifica el patrón ahora tiene 3.7x más chance de revertirlo.",
+      getText: () => "No es la edad. Es obstrucción en los vasos que llevan sangre al pene. Ahora vamos a mapear el daño.",
+      stat: "Quien identifica el patrón ahora tiene 3.7x más posibilidades de revertirlo.",
       cta: "MAPEAR EL DAÑO",
     },
     {
       afterStep: 11,
       emoji: "🧠",
-      headline: 'El mapa vascular de <span class="highlight">{name}</span> no es bonito.',
+      headline: 'O mapa vascular de <span class="highlight">{name}</span> não é bonito.',
       getText: () => {
         const manha = state.answers[9];
         const sono  = state.answers[10];
         const nome  = state.userData.name || "tú";
 
         if (manha === "zumbi") {
-          return `${nome}, tu cuerpo no se recupera de noche. El cortisol devora tu testosterona viva. Cada noche así es más daño.`;
+          return `${nome}, seu corpo não se recupera à noite. Cortisol come sua testosterona viva. Cada noite assim é mais dano.`;
         }
         if (manha === "odio") {
-          return `${nome}, esto no es exageración. Es testosterona en el piso. Cuando la sangre no circula, el pene es lo primero en pagar.`;
+          return `${nome}, eso no es excusa. Es testosterona por el suelo. Cuando la sangre no circula, el pene es lo primero en sufrir.`;
         }
         if (sono === "pessimo") {
-          return `${nome}, sin sueño profundo no hay testosterona. Sin testosterona no hay tamaño, firmeza ni duración.`;
+          return `${nome}, sem sono profundo não tem testosterona. Sem testosterona não tem tamanho, firmeza ou duração.`;
         }
         if (sono === "superficial") {
-          return `${nome}, dormir sin descansar es cargar el celular con el cable suelto. Por la mañana la batería está al 12%.`;
+          return `${nome}, dormir sem descansar é carregar o celular com o fio solto. De manhã a bateria tá em 12%.`;
         }
-        return "Tus vasos se están cerrando. Ahora vamos a cruzar con tus hábitos para descubrir qué lo está acelerando.";
+        return "Tus vasos se están cerrando. Ahora cruzamos con tus hábitos para descubrir qué está acelerando eso.";
       },
-      stat: "El 93% de los hombres con este perfil responden al protocolo en menos de 21 días.",
-      cta: "VER MIS HÁBITOS",
+      stat: "93% dos homens com esse perfil respondem ao protocolo em menos de 21 dias.",
+      cta: "VER MEUS HÁBITOS",
     },
     {
       afterStep: 14,
       emoji: "🔴",
-      headline: 'Vas a ver un número ahora. <span class="highlight">Revela cuánto ya se cerraron tus vasos.</span>',
+      headline: 'Você vai ver um número agora. <span class="highlight">Ele revela o quanto seus vasos já fecharam.</span>',
       getText: () => {
         const nome = state.userData.name || "tú";
-        return `${nome}, el sistema cruzó tus respuestas con 17.483 diagnósticos. Algunos hombres quedan en shock, otros sienten alivio. Prepárate.`;
+        return `${nome}, o sistema cruzou suas respostas com 17.483 diagnósticos. Alguns homens ficam em choque, outros sentem alívio. Prepara.`;
       },
-      stat: "La mayoría de los hombres nunca supo que este número existía.",
-      cta: "VER MI DIAGNÓSTICO",
+      stat: "A maioria dos homens nunca soube que esse número existia.",
+      cta: "VER MEU DIAGNÓSTICO",
     },
   ];
 
@@ -325,9 +325,29 @@
     return `
       <div class="input-group">
         <div class="whatsapp-input-wrapper">
-          <span class="whatsapp-flag">🇧🇷 +55</span>
+          <select class="whatsapp-ddi-select" id="ddi-select" aria-label="Código de país">
+            <option value="+52">🇲🇽 +52</option>
+            <option value="+57">🇨🇴 +57</option>
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+51">🇵🇪 +51</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+58">🇻🇪 +58</option>
+            <option value="+593">🇪🇨 +593</option>
+            <option value="+502">🇬🇹 +502</option>
+            <option value="+503">🇸🇻 +503</option>
+            <option value="+504">🇭🇳 +504</option>
+            <option value="+505">🇳🇮 +505</option>
+            <option value="+506">🇨🇷 +506</option>
+            <option value="+507">🇵🇦 +507</option>
+            <option value="+591">🇧🇴 +591</option>
+            <option value="+595">🇵🇾 +595</option>
+            <option value="+598">🇺🇾 +598</option>
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+55">🇧🇷 +55</option>
+          </select>
           <input type="tel" class="input-field whatsapp-field" id="input-${step.field.name}"
-            name="${step.field.name}" placeholder="${step.field.placeholder}"
+            name="${step.field.name}" placeholder="000 000 0000"
             inputmode="tel" maxlength="15" autocomplete="tel">
         </div>
       </div>
@@ -470,7 +490,7 @@
         return null;
       }
       input.addEventListener("input", function () {
-        let v = this.value.replace(/\D/g, "").substring(0, 11);
+        let v = this.value.replace(/\D/g, "").substring(0, 12);
         if (v.length > 6)      v = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7)}`;
         else if (v.length > 2) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
         else if (v.length > 0) v = `(${v}`;
@@ -481,6 +501,9 @@
         showWhatsappError(errorMsg);
         if (btnContinue) btnContinue.disabled = !complete;
         state.userData.whatsapp = complete ? `+55${digits}` : "";
+        const ddiEl = document.getElementById("ddi-select");
+        const ddi = ddiEl ? ddiEl.value : "+52";
+        state.userData.whatsapp = ddi + " " + state.userData.whatsapp;
         state.answers[step.id] = state.userData.whatsapp;
       });
       setTimeout(() => input.focus(), 400);
@@ -506,7 +529,7 @@
 
   function showInlineTrigger(text) {
     const el = document.getElementById("step-trigger");
-    if (el) { el.textContent = injectName(text); el.classList.add("visible"); }
+    if (el) { el.textContent = text; el.classList.add("visible"); }
   }
 
   // ── ÁUDIO ─────────────────────────────────────────────────
@@ -562,10 +585,9 @@
   // ── SHOCK SCREEN ─────────────────────────────────────────
   function showShockScreen(message, onContinue) {
     const screen = document.getElementById("interstitial");
-    const resolvedMessage = injectName(message);
-    const emojiMatch = resolvedMessage.match(/^(🛑|⚠|⚠️|✓)/u);
+    const emojiMatch = message.match(/^(🛑|⚠|⚠️|✓)/u);
     const emoji = emojiMatch ? emojiMatch[0] : "⚠️";
-    const bodyText = resolvedMessage.replace(/^(🛑|⚠|⚠️|✓)\s*/u, "");
+    const bodyText = message.replace(/^(🛑|⚠|⚠️|✓)\s*/u, "");
     const isCritical = emoji === "🛑";
     const isAlert    = isCritical || emoji === "⚠️" || emoji === "⚠";
     const isPositive = emoji === "✓";
@@ -575,16 +597,16 @@
     let shockCta;
     if (isPositive) {
       shockCta = "CONTINUAR →";
-    } else if (resolvedMessage.includes("pene") || resolvedMessage.includes("erección") || resolvedMessage.includes("firmeza") || resolvedMessage.includes("duro") || resolvedMessage.includes("flujo") || resolvedMessage.includes("vasos")) {
-      shockCta = isCritical ? "ENTENDÍ, QUIERO SABER SI TIENE SOLUCIÓN" : "VER EL SIGUIENTE";
-    } else if (resolvedMessage.includes("músculo") || resolvedMessage.includes("noche") || resolvedMessage.includes("recuper") || resolvedMessage.includes("destruyendo")) {
-      shockCta = isCritical ? "ENTENDÍ, CONTINUAR EL DIAGNÓSTICO" : "VER EL SIGUIENTE";
-    } else if (resolvedMessage.includes("estrés") || resolvedMessage.includes("agotamiento") || resolvedMessage.includes("cabeza") || resolvedMessage.includes("apagado")) {
-      shockCta = isCritical ? "ENTENDÍ, VER EL RESTO" : "VER EL SIGUIENTE";
-    } else if (resolvedMessage.includes("grasa") || resolvedMessage.includes("hormona femenina") || resolvedMessage.includes("barriga") || resolvedMessage.includes("panza")) {
-      shockCta = isCritical ? "ENTENDÍ, CONTINUAR EL DIAGNÓSTICO" : "VER EL SIGUIENTE";
+    } else if (message.includes("pene") || message.includes("erección") || message.includes("firme") || message.includes("firmeza") || message.includes("duro") || message.includes("ahí abajo")) {
+      shockCta = isCritical ? "ENTENDI, QUERO SABER SE TEM JEITO" : "VER O PRÓXIMO";
+    } else if (message.includes("músculo") || message.includes("noite") || message.includes("recuper") || message.includes("destroindo")) {
+      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
+    } else if (message.includes("estresse") || message.includes("esgotamento") || message.includes("cabeça") || message.includes("apagado")) {
+      shockCta = isCritical ? "ENTENDI, VER O RESTO" : "VER O PRÓXIMO";
+    } else if (message.includes("gordura") || message.includes("hormônio feminino") || message.includes("barriga")) {
+      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
     } else {
-      shockCta = isCritical ? "ENTENDÍ, CONTINUAR EL DIAGNÓSTICO" : "VER EL SIGUIENTE";
+      shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
     }
 
     screen.innerHTML = `
@@ -672,7 +694,9 @@
   function startLoading() {
     showScreen("loading");
     if (window.vortxTrack) vortxTrack("quiz_complete");
-    const name = state.userData.name || "tú"; = TESTIMONIALS.map((t, i) => `
+    const name = state.userData.name || "tú";
+
+    const testimonialsHtml = TESTIMONIALS.map((t, i) => `
       <div class="loading-testimonial-card ${i === 0 ? "active" : ""}" data-testimonial="${i}">
         <div class="loading-testimonial-header">
           <div class="loading-testimonial-avatar"><img src="${t.photo}" alt="${t.initials}" loading="lazy" decoding="async" width="80" height="80"></div>
@@ -790,7 +814,7 @@
     const score = state.score;
     if (window.vortxTrack) vortxTrack("view_result", { score: score });
     const zone  = RESULT_DATA.scoreZones.find((z) => score >= z.min && score <= z.max);
-    const name  = state.userData.name || "Usuario";
+    const name  = state.userData.name || "Usuário";
     const circ  = 2 * Math.PI * 80;
     const offset= circ - (score / 100) * circ;
 
@@ -821,11 +845,11 @@
       <p class="result-description">${zone.description}</p>
       <div class="result-critical-areas">${areasHtml}</div>
       <div class="result-urgency-block">
-        <p class="result-urgency-text">Tus vasos se están cerrando ahora, mientras lees esto. Cada mes sin actuar es más bloqueo, menos sangre, menos tamaño, menos duración — y este grado todavía tiene reversión, pero no para siempre.</p>
+        <p class="result-urgency-text">Tus vasos se están cerrando ahora mismo, mientras lees esto. Cada mes sin actuar es más bloqueo, menos sangre, menos tamaño, menos duración — y este grado todavía tiene reversión, pero no para siempre.</p>
         <p class="result-urgency-subtext">El protocolo de reversión vascular fue calibrado para tu perfil exacto.</p>
       </div>
       <div style="width:100%;padding:20px 0;display:flex;justify-content:center;">
-        <button class="btn-cta" id="btn-see-protocol">QUIERO VER LO QUE LO RESUELVE</button>
+        <button class="btn-cta" id="btn-see-protocol">QUIERO VER LO QUE RESUELVE ESTO</button>
       </div>
     `;
 
@@ -861,13 +885,13 @@
 
     let bridgeText;
     if (score <= 35) {
-      bridgeText = `${name}, tus vasos están casi cerrados, pero "casi" significa que todavía hay tiempo. El protocolo fue creado exactamente para este grado de bloqueo, para forzar la sangre a volver. No es para todos. Es para quien llegó hasta aquí y quiere el tamaño, la firmeza y la duración de vuelta.`;
+      bridgeText = `${name}, tus vasos están casi cerrados — pero "casi" significa que todavía hay tiempo. El protocolo fue creado exactamente para este grado de bloqueo, para forzar la sangre a volver. No es para todos. Es para quien llegó hasta aquí y quiere el tamaño, la firmeza y la duración de vuelta.`;
     } else if (score <= 60) {
-      bridgeText = `${name}, tus vasos se están cerrando, mes a mes. El tamaño ya cayó. La duración ya se acortó. El protocolo de reversión vascular está calibrado para tu grado exacto de bloqueo. Pero cada mes sin actuar cierra un vaso más.`;
+      bridgeText = `${name}, tus vasos se están cerrando, mes a mes. El tamaño ya bajó. La duración ya se acortó. El protocolo de reversión vascular está calibrado para tu grado exacto de bloqueo. Pero cada mes sin actuar cierra un vaso más.`;
     } else if (score <= 80) {
       bridgeText = `${name}, la caída todavía es sutil, pero está acelerando. En 2-3 años sin intervención, el daño se vuelve irreversible. El protocolo frena la caída y maximiza el flujo sanguíneo al pene mientras todavía hay tiempo.`;
     } else {
-      bridgeText = `${name}, tus vasos todavía responden. Pero los factores de riesgo están ahí. El protocolo garantiza que mantengas y maximices cada centímetro, cada minuto de duración, cada erección. Mientras los demás a tu alrededor van perdiendo.`;
+      bridgeText = `${name}, tus vasos todavía responden. Pero los factores de riesgo están ahí. El protocolo garantiza que mantengas y maximices cada centímetro, cada minuto de duración, cada erección — mientras los demás a tu alrededor van perdiendo.`;
     }
 
     document.getElementById("bridge").innerHTML = `
@@ -875,7 +899,7 @@
         <div class="bridge-icon">⚔️</div>
         <p class="bridge-label">PROTOCOLO ENCONTRADO</p>
         <div class="bridge-window-block">
-          <span class="bridge-window-label">Janela para agir</span>
+          <span class="bridge-window-label">Ventana para actuar</span>
           <span class="bridge-window-status" style="color:${urgColor}">${urgLabel}</span>
           <span class="bridge-window-days" style="color:${urgColor}">${diasJanela} dias estimados</span>
         </div>
@@ -893,13 +917,13 @@
   function showProtocol() {
     showScreen("protocol");
     const name     = state.userData.name || "tú";
-    const painArea = state.answers[16];
+    const painArea = state.answers[10];
 
     const headlineMap = {
-      parceira: "O Protocolo Pra Você Voltar a Fazer Sua Mulher Implorar Por Mais",
-      eu_mesmo: "O Protocolo Pra Você Olhar Pra Baixo e Se Reconhecer de Novo",
-      trabalho: "O Protocolo Pra Você Recuperar a Potência Que Te Fazia Imbatível",
-      tudo:     "O Protocolo Pra Você Recuperar Tamanho, Duração e Controle, Tudo de Volta",
+      parceira: "El Protocolo Para Que Tu Pareja No Quiera Que Pares",
+      eu_mesmo: "El Protocolo Para Que Vuelvas a Reconocerte Como Hombre",
+      tudo:     "El Protocolo Para Recuperar Tamaño, Duración y Control — Todo de Vuelta",
+      confianza:"El Protocolo Para Recuperar Tu Cuerpo y Tu Confianza",
     };
     const headline = headlineMap[painArea] || PROTOCOL_DATA.headline;
 
@@ -941,7 +965,7 @@
         <button class="btn-cta" id="btn-go-pricing">${PROTOCOL_DATA.cta}</button>
       </div>
       <div>
-        <p class="testimonials-title">Quienes tenían el mismo problema que tú</p>
+        <p class="testimonials-title">Hombres que tenían el mismo problema que tú</p>
         ${testimonialsHtml}
       </div>
     `;
@@ -954,12 +978,12 @@
     showScreen("pricing");
     if (window.vortxTrack) vortxTrack("view_pricing", { score: state.score });
 
-    const painArea  = state.answers[16];
+    const painArea  = state.answers[10];
     const name      = state.userData.name || "";
     const buildCheckoutCta = (planId) => {
       const plan = PRICING_DATA.plans.find((p) => p.id === planId);
       if (!plan) return "";
-      return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">R$ ${plan.price}</span>`;
+      return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">$ ${plan.price}</span>`;
     };
 
     const plansHtml = PRICING_DATA.plans.map((plan) => {
@@ -970,12 +994,12 @@
       return `
         <div class="pricing-plan ${isFeatured ? "featured" : ""} ${isSelected ? "selected" : ""} ${isDowngrade ? "plan-downgrade" : ""}" data-plan="${plan.id}">
           ${plan.badge ? `<div class="pricing-plan-badge">${plan.badge}</div>` : ""}
-          ${isDowngrade ? `<div class="plan-downgrade-label">⚠ Versão mutilada, sem protocolo vascular</div>` : ""}
+          ${isDowngrade ? `<div class="plan-downgrade-label">⚠ Versión limitada — sin protocolo vascular</div>` : ""}
           <div class="pricing-plan-header">
             <div class="pricing-plan-name">${plan.name}</div>
             <div class="pricing-plan-price-container">
-              <div class="pricing-plan-original-price">R$ ${plan.originalPrice}</div>
-              <div class="pricing-plan-price"><span>R$</span> ${plan.price}</div>
+              <div class="pricing-plan-original-price">$ ${plan.originalPrice}</div>
+              <div class="pricing-plan-price"><span>$</span> ${plan.price}</div>
               <div class="pricing-plan-period">${plan.period}</div>
             </div>
           </div>
@@ -990,9 +1014,9 @@
 
     const score = state.score;
     const pricingHeadline = score <= 35
-      ? `${name ? name + ", seus" : "Seus"} vasos estão quase fechados. Essa é a última janela.`
+      ? `${name ? name + ", tus" : "Tus"} vasos están casi cerrados. Esta es la última ventana.`
       : score <= 60
-      ? `${name ? name + ", o" : "O"} bloqueio ainda é reversível, mas não por muito tempo.`
+      ? `${name ? name + ", el" : "El"} bloqueo todavía es reversible — pero no por mucho tiempo.`
       : `${name ? name + ", el" : "El"} protocolo vascular está listo. Solo falta tú.`;
 
     document.getElementById("pricing").innerHTML = `
@@ -1003,18 +1027,18 @@
       <div class="pricing-timer-container">
         <div class="pricing-timer-label">${PRICING_DATA.urgencyText}</div>
         <div class="pricing-timer" id="pricing-timer">08:00</div>
-        <div class="pricing-timer-sub">Después de eso el precio vuelve a $197</div>
+        <div class="pricing-timer-sub">Después de esto el precio vuelve a $197</div>
       </div>
 
       <div class="pricing-anchor-block">
-        <p class="pricing-anchor-text">Cada mes sin actuar, pierdes más tamaño, más firmeza, más duración. En 12 meses el daño se vuelve irreversible, y el costo de no actuar es perder lo que te hace hombre.</p>
-        <p class="pricing-anchor-sub">El acceso completo cuesta menos que una cena, y puede cambiar los próximos 20 años de tu vida.</p>
+        <p class="pricing-anchor-text">Cada mes sin actuar pierdes más tamaño, más firmeza, más duración. En 12 meses el daño se vuelve irreversible — y el costo de no actuar es perder lo que te hace hombre.</p>
+        <p class="pricing-anchor-sub">El acceso completo cuesta menos que una cena — y puede cambiar los próximos 20 años de tu vida.</p>
       </div>
 
       <div class="pricing-plans">${plansHtml}</div>
 
       <div class="pricing-urgency-bio-block">
-        <p class="pricing-urgency-bio-text">Esta noche vas a acostarte en la cama. Vas a mirar el techo y vas a saber que podrías haber hecho algo diferente. Mañana vas a despertar igual o peor. El bloqueo vascular no espera, no para, no negocia. <strong>La única pregunta es: ¿vas a actuar mientras todavía hay tiempo?</strong></p>
+        <p class="pricing-urgency-bio-text">Esta noche vas a acostarte. Vas a mirar el techo y vas a saber que podrías haber hecho algo diferente. Mañana vas a despertar igual o peor. El bloqueo vascular no espera, no para, no negocia. <strong>La única pregunta es: ¿vas a actuar mientras todavía hay tiempo?</strong></p>
       </div>
 
       <div class="guarantee-box guarantee-box--pre-cta">
@@ -1025,7 +1049,7 @@
 
       <div class="checkout-cta-block">
         <button class="btn-cta btn-cta--checkout" id="btn-checkout">${buildCheckoutCta(state.selectedPlan)}</button>
-        <p class="checkout-sub">Acceso inmediato • Sin mensualidad oculta • Cancela cuando quieras</p>
+        <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía de 30 días</p>
         <div class="payment-methods">
           ${PRICING_DATA.paymentMethods.map((m) => `<span class="payment-method">${m}</span>`).join("")}
         </div>
@@ -1036,7 +1060,7 @@
 
     document.getElementById("btn-checkout").addEventListener("click", () => {
       var plan = PRICING_DATA.plans.find(function(p) { return p.id === state.selectedPlan; });
-      if (window.vortxTrack) vortxTrack("begin_checkout", { value: plan ? plan.price : 0, currency: "BRL", plan: state.selectedPlan });
+      if (window.vortxTrack) vortxTrack("begin_checkout", { value: plan ? plan.price : 0, currency: "USD", plan: state.selectedPlan });
       var plan = state.selectedPlan;
       var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
       var userName = encodeURIComponent(state.userData.name || "");
@@ -1073,7 +1097,7 @@
             rebindPlanSelection((planId) => {
               const plan = PRICING_DATA.plans.find((p) => p.id === planId);
               if (!plan) return "";
-              return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">R$ ${plan.price}</span>`;
+              return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">$ ${plan.price}</span>`;
             });
             startPricingTimer();
           });
@@ -1105,7 +1129,7 @@
   // ── THANK YOU ─────────────────────────────────────────────
   function showThankYou() {
     showScreen("thankyou");
-    const name = state.userData.name || "Usuario";
+    const name = state.userData.name || "Usuário";
     const stepsHtml = THANKYOU_DATA.steps.map((s) => `
       <div class="thankyou-step">
         <div class="thankyou-step-number">${s.number}</div>

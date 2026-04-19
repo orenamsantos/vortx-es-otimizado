@@ -36,10 +36,10 @@
     {
       afterStep: 4,
       emoji: "🔬",
-      headline: '{name}, isso tem nome: <span class="highlight">bloqueio vascular peniano.</span>',
-      getText: () => "Não é da idade. É entupimento nos vasos que levam sangue pro pênis. Agora vamos mapear o estrago.",
-      stat: "Quem identifica o padrão agora tem 3.7x mais chance de reverter.",
-      cta: "MAPEAR O ESTRAGO",
+      headline: '{name}, esto tiene nombre: <span class="highlight">bloqueo vascular peniano.</span>',
+      getText: () => "No es la edad. Es obstrucción en los vasos que llevan sangre al pene. Ahora vamos a mapear el daño.",
+      stat: "Quien identifica el patrón ahora tiene 3.7x más posibilidades de revertirlo.",
+      cta: "MAPEAR EL DAÑO",
     },
     {
       afterStep: 11,
@@ -48,13 +48,13 @@
       getText: () => {
         const manha = state.answers[9];
         const sono  = state.answers[10];
-        const nome  = state.userData.name || "você";
+        const nome  = state.userData.name || "tú";
 
         if (manha === "zumbi") {
           return `${nome}, seu corpo não se recupera à noite. Cortisol come sua testosterona viva. Cada noite assim é mais dano.`;
         }
         if (manha === "odio") {
-          return `${nome}, isso não é frescura. É testosterona no subsolo. Quando o sangue não circula, o pênis é o primeiro a pagar.`;
+          return `${nome}, eso no es excusa. Es testosterona por el suelo. Cuando la sangre no circula, el pene es lo primero en sufrir.`;
         }
         if (sono === "pessimo") {
           return `${nome}, sem sono profundo não tem testosterona. Sem testosterona não tem tamanho, firmeza ou duração.`;
@@ -62,7 +62,7 @@
         if (sono === "superficial") {
           return `${nome}, dormir sem descansar é carregar o celular com o fio solto. De manhã a bateria tá em 12%.`;
         }
-        return "Seus vasos estão se fechando. Agora vamos cruzar com seus hábitos pra descobrir o que está acelerando isso.";
+        return "Tus vasos se están cerrando. Ahora cruzamos con tus hábitos para descubrir qué está acelerando eso.";
       },
       stat: "93% dos homens com esse perfil respondem ao protocolo em menos de 21 dias.",
       cta: "VER MEUS HÁBITOS",
@@ -72,7 +72,7 @@
       emoji: "🔴",
       headline: 'Você vai ver um número agora. <span class="highlight">Ele revela o quanto seus vasos já fecharam.</span>',
       getText: () => {
-        const nome = state.userData.name || "você";
+        const nome = state.userData.name || "tú";
         return `${nome}, o sistema cruzou suas respostas com 17.483 diagnósticos. Alguns homens ficam em choque, outros sentem alívio. Prepara.`;
       },
       stat: "A maioria dos homens nunca soube que esse número existia.",
@@ -100,7 +100,7 @@
   function getCurrentPhase() { const s = getCurrentStep(); return s ? s.phase : 1; }
 
   function injectName(text) {
-    return text.replace(/\{name\}/g, state.userData.name || "você");
+    return text.replace(/\{name\}/g, state.userData.name || "tú");
   }
 
   // ── RENDER GATE ───────────────────────────────────────────
@@ -325,9 +325,29 @@
     return `
       <div class="input-group">
         <div class="whatsapp-input-wrapper">
-          <span class="whatsapp-flag">🇧🇷 +55</span>
+          <select class="whatsapp-ddi-select" id="ddi-select" aria-label="Código de país">
+            <option value="+52">🇲🇽 +52</option>
+            <option value="+57">🇨🇴 +57</option>
+            <option value="+54">🇦🇷 +54</option>
+            <option value="+51">🇵🇪 +51</option>
+            <option value="+56">🇨🇱 +56</option>
+            <option value="+58">🇻🇪 +58</option>
+            <option value="+593">🇪🇨 +593</option>
+            <option value="+502">🇬🇹 +502</option>
+            <option value="+503">🇸🇻 +503</option>
+            <option value="+504">🇭🇳 +504</option>
+            <option value="+505">🇳🇮 +505</option>
+            <option value="+506">🇨🇷 +506</option>
+            <option value="+507">🇵🇦 +507</option>
+            <option value="+591">🇧🇴 +591</option>
+            <option value="+595">🇵🇾 +595</option>
+            <option value="+598">🇺🇾 +598</option>
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+55">🇧🇷 +55</option>
+          </select>
           <input type="tel" class="input-field whatsapp-field" id="input-${step.field.name}"
-            name="${step.field.name}" placeholder="${step.field.placeholder}"
+            name="${step.field.name}" placeholder="000 000 0000"
             inputmode="tel" maxlength="15" autocomplete="tel">
         </div>
       </div>
@@ -470,7 +490,7 @@
         return null;
       }
       input.addEventListener("input", function () {
-        let v = this.value.replace(/\D/g, "").substring(0, 11);
+        let v = this.value.replace(/\D/g, "").substring(0, 12);
         if (v.length > 6)      v = `(${v.substring(0,2)}) ${v.substring(2,7)}-${v.substring(7)}`;
         else if (v.length > 2) v = `(${v.substring(0,2)}) ${v.substring(2)}`;
         else if (v.length > 0) v = `(${v}`;
@@ -481,6 +501,9 @@
         showWhatsappError(errorMsg);
         if (btnContinue) btnContinue.disabled = !complete;
         state.userData.whatsapp = complete ? `+55${digits}` : "";
+        const ddiEl = document.getElementById("ddi-select");
+        const ddi = ddiEl ? ddiEl.value : "+52";
+        state.userData.whatsapp = ddi + " " + state.userData.whatsapp;
         state.answers[step.id] = state.userData.whatsapp;
       });
       setTimeout(() => input.focus(), 400);
@@ -574,7 +597,7 @@
     let shockCta;
     if (isPositive) {
       shockCta = "CONTINUAR →";
-    } else if (message.includes("pênis") || message.includes("ereção") || message.includes("firme") || message.includes("firmeza") || message.includes("duro") || message.includes("lá embaixo")) {
+    } else if (message.includes("pene") || message.includes("erección") || message.includes("firme") || message.includes("firmeza") || message.includes("duro") || message.includes("ahí abajo")) {
       shockCta = isCritical ? "ENTENDI, QUERO SABER SE TEM JEITO" : "VER O PRÓXIMO";
     } else if (message.includes("músculo") || message.includes("noite") || message.includes("recuper") || message.includes("destroindo")) {
       shockCta = isCritical ? "ENTENDI, CONTINUAR O DIAGNÓSTICO" : "VER O PRÓXIMO";
@@ -671,7 +694,7 @@
   function startLoading() {
     showScreen("loading");
     if (window.vortxTrack) vortxTrack("quiz_complete");
-    const name = state.userData.name || "você";
+    const name = state.userData.name || "tú";
 
     const testimonialsHtml = TESTIMONIALS.map((t, i) => `
       <div class="loading-testimonial-card ${i === 0 ? "active" : ""}" data-testimonial="${i}">
@@ -822,11 +845,11 @@
       <p class="result-description">${zone.description}</p>
       <div class="result-critical-areas">${areasHtml}</div>
       <div class="result-urgency-block">
-        <p class="result-urgency-text">Seus vasos estão se fechando agora, enquanto você lê isso. Cada mês sem agir é mais bloqueio, menos sangue, menos tamanho, menos duração, e esse grau ainda tem reversão, mas não pra sempre.</p>
-        <p class="result-urgency-subtext">O protocolo de reversão vascular foi calibrado pro seu perfil exato.</p>
+        <p class="result-urgency-text">Tus vasos se están cerrando ahora mismo, mientras lees esto. Cada mes sin actuar es más bloqueo, menos sangre, menos tamaño, menos duración — y este grado todavía tiene reversión, pero no para siempre.</p>
+        <p class="result-urgency-subtext">El protocolo de reversión vascular fue calibrado para tu perfil exacto.</p>
       </div>
       <div style="width:100%;padding:20px 0;display:flex;justify-content:center;">
-        <button class="btn-cta" id="btn-see-protocol">QUERO VER O QUE RESOLVE ISSO</button>
+        <button class="btn-cta" id="btn-see-protocol">QUIERO VER LO QUE RESUELVE ESTO</button>
       </div>
     `;
 
@@ -853,22 +876,22 @@
   // ── BRIDGE ────────────────────────────────────────────────
   function showBridge() {
     showScreen("bridge");
-    const name  = state.userData.name || "você";
+    const name  = state.userData.name || "tú";
     const score = state.score;
 
     const diasJanela = score <= 35 ? 47 : score <= 60 ? 90 : score <= 80 ? 180 : 365;
-    const urgLabel   = score <= 35 ? "CRÍTICA" : score <= 60 ? "CURTA" : "ABERTA";
+    const urgLabel   = score <= 35 ? "CRÍTICA" : score <= 60 ? "CORTA" : "ABIERTA";
     const urgColor   = score <= 35 ? "#C44B4B" : score <= 60 ? "#D4940A" : "#C9A84C";
 
     let bridgeText;
     if (score <= 35) {
-      bridgeText = `${name}, seus vasos estão quase fechados, mas "quase" significa que ainda dá tempo. O protocolo foi criado exatamente pra esse grau de bloqueio, pra forçar o sangue a voltar. Não é pra todo mundo. É pra quem chegou até aqui e quer o tamanho, a firmeza e a duração de volta.`;
+      bridgeText = `${name}, tus vasos están casi cerrados — pero "casi" significa que todavía hay tiempo. El protocolo fue creado exactamente para este grado de bloqueo, para forzar la sangre a volver. No es para todos. Es para quien llegó hasta aquí y quiere el tamaño, la firmeza y la duración de vuelta.`;
     } else if (score <= 60) {
-      bridgeText = `${name}, seus vasos estão se fechando, mês a mês. O tamanho já caiu. A duração já encurtou. O protocolo de reversão vascular está calibrado pro seu grau exato de bloqueio. Mas cada mês sem agir fecha mais um vaso.`;
+      bridgeText = `${name}, tus vasos se están cerrando, mes a mes. El tamaño ya bajó. La duración ya se acortó. El protocolo de reversión vascular está calibrado para tu grado exacto de bloqueo. Pero cada mes sin actuar cierra un vaso más.`;
     } else if (score <= 80) {
-      bridgeText = `${name}, a queda ainda é sutil, mas está acelerando. Em 2-3 anos sem intervenção, o dano vira irreversível. O protocolo trava a queda e maximiza o fluxo sanguíneo pro pênis enquanto ainda dá tempo.`;
+      bridgeText = `${name}, la caída todavía es sutil, pero está acelerando. En 2-3 años sin intervención, el daño se vuelve irreversible. El protocolo frena la caída y maximiza el flujo sanguíneo al pene mientras todavía hay tiempo.`;
     } else {
-      bridgeText = `${name}, seus vasos ainda respondem. Mas os fatores de risco estão lá. O protocolo garante que você mantenha e maximize cada centímetro, cada minuto de duração, cada ereção. Enquanto os outros ao redor vão perdendo.`;
+      bridgeText = `${name}, tus vasos todavía responden. Pero los factores de riesgo están ahí. El protocolo garantiza que mantengas y maximices cada centímetro, cada minuto de duración, cada erección — mientras los demás a tu alrededor van perdiendo.`;
     }
 
     document.getElementById("bridge").innerHTML = `
@@ -876,13 +899,13 @@
         <div class="bridge-icon">⚔️</div>
         <p class="bridge-label">PROTOCOLO ENCONTRADO</p>
         <div class="bridge-window-block">
-          <span class="bridge-window-label">Janela para agir</span>
+          <span class="bridge-window-label">Ventana para actuar</span>
           <span class="bridge-window-status" style="color:${urgColor}">${urgLabel}</span>
           <span class="bridge-window-days" style="color:${urgColor}">${diasJanela} dias estimados</span>
         </div>
         <p class="bridge-text">${bridgeText}</p>
         <div class="bridge-divider"></div>
-        <p class="bridge-warning">Protocolo gerado com base no que você respondeu. Acesso restrito.</p>
+        <p class="bridge-warning">Protocolo generado en base a tus respuestas. Acceso restringido.</p>
         <button class="btn-cta" id="btn-bridge-continue">${BRIDGE_DATA.cta}</button>
       </div>
     `;
@@ -893,14 +916,14 @@
   // ── PROTOCOL ──────────────────────────────────────────────
   function showProtocol() {
     showScreen("protocol");
-    const name     = state.userData.name || "você";
-    const painArea = state.answers[16];
+    const name     = state.userData.name || "tú";
+    const painArea = state.answers[10];
 
     const headlineMap = {
-      parceira: "O Protocolo Pra Você Voltar a Fazer Sua Mulher Implorar Por Mais",
-      eu_mesmo: "O Protocolo Pra Você Olhar Pra Baixo e Se Reconhecer de Novo",
-      trabalho: "O Protocolo Pra Você Recuperar a Potência Que Te Fazia Imbatível",
-      tudo:     "O Protocolo Pra Você Recuperar Tamanho, Duração e Controle, Tudo de Volta",
+      parceira: "El Protocolo Para Que Tu Pareja No Quiera Que Pares",
+      eu_mesmo: "El Protocolo Para Que Vuelvas a Reconocerte Como Hombre",
+      tudo:     "El Protocolo Para Recuperar Tamaño, Duración y Control — Todo de Vuelta",
+      confianza:"El Protocolo Para Recuperar Tu Cuerpo y Tu Confianza",
     };
     const headline = headlineMap[painArea] || PROTOCOL_DATA.headline;
 
@@ -942,7 +965,7 @@
         <button class="btn-cta" id="btn-go-pricing">${PROTOCOL_DATA.cta}</button>
       </div>
       <div>
-        <p class="testimonials-title">Quem tinha o mesmo problema que você</p>
+        <p class="testimonials-title">Hombres que tenían el mismo problema que tú</p>
         ${testimonialsHtml}
       </div>
     `;
@@ -955,12 +978,12 @@
     showScreen("pricing");
     if (window.vortxTrack) vortxTrack("view_pricing", { score: state.score });
 
-    const painArea  = state.answers[16];
+    const painArea  = state.answers[10];
     const name      = state.userData.name || "";
     const buildCheckoutCta = (planId) => {
       const plan = PRICING_DATA.plans.find((p) => p.id === planId);
       if (!plan) return "";
-      return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">R$ ${plan.price}</span>`;
+      return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">$ ${plan.price}</span>`;
     };
 
     const plansHtml = PRICING_DATA.plans.map((plan) => {
@@ -971,12 +994,12 @@
       return `
         <div class="pricing-plan ${isFeatured ? "featured" : ""} ${isSelected ? "selected" : ""} ${isDowngrade ? "plan-downgrade" : ""}" data-plan="${plan.id}">
           ${plan.badge ? `<div class="pricing-plan-badge">${plan.badge}</div>` : ""}
-          ${isDowngrade ? `<div class="plan-downgrade-label">⚠ Versão mutilada, sem protocolo vascular</div>` : ""}
+          ${isDowngrade ? `<div class="plan-downgrade-label">⚠ Versión limitada — sin protocolo vascular</div>` : ""}
           <div class="pricing-plan-header">
             <div class="pricing-plan-name">${plan.name}</div>
             <div class="pricing-plan-price-container">
-              <div class="pricing-plan-original-price">R$ ${plan.originalPrice}</div>
-              <div class="pricing-plan-price"><span>R$</span> ${plan.price}</div>
+              <div class="pricing-plan-original-price">$ ${plan.originalPrice}</div>
+              <div class="pricing-plan-price"><span>$</span> ${plan.price}</div>
               <div class="pricing-plan-period">${plan.period}</div>
             </div>
           </div>
@@ -991,10 +1014,10 @@
 
     const score = state.score;
     const pricingHeadline = score <= 35
-      ? `${name ? name + ", seus" : "Seus"} vasos estão quase fechados. Essa é a última janela.`
+      ? `${name ? name + ", tus" : "Tus"} vasos están casi cerrados. Esta es la última ventana.`
       : score <= 60
-      ? `${name ? name + ", o" : "O"} bloqueio ainda é reversível, mas não por muito tempo.`
-      : `${name ? name + ", o" : "O"} protocolo vascular está pronto. Falta você.`;
+      ? `${name ? name + ", el" : "El"} bloqueo todavía es reversible — pero no por mucho tiempo.`
+      : `${name ? name + ", el" : "El"} protocolo vascular está listo. Solo falta tú.`;
 
     document.getElementById("pricing").innerHTML = `
       <div style="text-align:center;">
@@ -1004,18 +1027,18 @@
       <div class="pricing-timer-container">
         <div class="pricing-timer-label">${PRICING_DATA.urgencyText}</div>
         <div class="pricing-timer" id="pricing-timer">08:00</div>
-        <div class="pricing-timer-sub">Depois disso o preço volta pra R$197</div>
+        <div class="pricing-timer-sub">Después de esto el precio vuelve a $197</div>
       </div>
 
       <div class="pricing-anchor-block">
-        <p class="pricing-anchor-text">Cada m\u00EAs sem agir, voc\u00EA perde mais tamanho, mais firmeza, mais dura\u00E7\u00E3o. Em 12 meses o dano vira irrevers\u00EDvel, e o custo de n\u00E3o agir \u00E9 perder o que te faz homem.</p>
-        <p class="pricing-anchor-sub">O acesso completo custa menos que um jantar, e pode mudar os pr\u00F3ximos 20 anos da sua vida.</p>
+        <p class="pricing-anchor-text">Cada mes sin actuar pierdes más tamaño, más firmeza, más duración. En 12 meses el daño se vuelve irreversible — y el costo de no actuar es perder lo que te hace hombre.</p>
+        <p class="pricing-anchor-sub">El acceso completo cuesta menos que una cena — y puede cambiar los próximos 20 años de tu vida.</p>
       </div>
 
       <div class="pricing-plans">${plansHtml}</div>
 
       <div class="pricing-urgency-bio-block">
-        <p class="pricing-urgency-bio-text">Hoje à noite você vai deitar na cama. Vai olhar pro teto e vai saber que poderia ter feito diferente. Amanhã vai acordar igual ou pior. O bloqueio vascular não espera, não para, não negocia. <strong>A única pergunta é: você vai agir enquanto ainda dá tempo?</strong></p>
+        <p class="pricing-urgency-bio-text">Esta noche vas a acostarte. Vas a mirar el techo y vas a saber que podrías haber hecho algo diferente. Mañana vas a despertar igual o peor. El bloqueo vascular no espera, no para, no negocia. <strong>La única pregunta es: ¿vas a actuar mientras todavía hay tiempo?</strong></p>
       </div>
 
       <div class="guarantee-box guarantee-box--pre-cta">
@@ -1026,7 +1049,7 @@
 
       <div class="checkout-cta-block">
         <button class="btn-cta btn-cta--checkout" id="btn-checkout">${buildCheckoutCta(state.selectedPlan)}</button>
-        <p class="checkout-sub">Acesso na hora • Sem mensalidade escondida • Cancela quando quiser</p>
+        <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía de 30 días</p>
         <div class="payment-methods">
           ${PRICING_DATA.paymentMethods.map((m) => `<span class="payment-method">${m}</span>`).join("")}
         </div>
@@ -1037,7 +1060,7 @@
 
     document.getElementById("btn-checkout").addEventListener("click", () => {
       var plan = PRICING_DATA.plans.find(function(p) { return p.id === state.selectedPlan; });
-      if (window.vortxTrack) vortxTrack("begin_checkout", { value: plan ? plan.price : 0, currency: "BRL", plan: state.selectedPlan });
+      if (window.vortxTrack) vortxTrack("begin_checkout", { value: plan ? plan.price : 0, currency: "USD", plan: state.selectedPlan });
       var plan = state.selectedPlan;
       var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
       var userName = encodeURIComponent(state.userData.name || "");
@@ -1074,7 +1097,7 @@
             rebindPlanSelection((planId) => {
               const plan = PRICING_DATA.plans.find((p) => p.id === planId);
               if (!plan) return "";
-              return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">R$ ${plan.price}</span>`;
+              return `<span style="display:block;font-size:0.65rem;letter-spacing:2px;opacity:0.7;margin-bottom:2px;">${plan.ctaTag}</span>${plan.ctaLabel}<br><span style="display:block;font-size:1.4rem;margin-top:4px;">$ ${plan.price}</span>`;
             });
             startPricingTimer();
           });
