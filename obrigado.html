@@ -152,7 +152,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <span class="testi-badge">Tamaño y firmeza en 2 horas, sin pastilla</span>
     </div>
     <div class="price-block fade-up d8">
-      <div class="price-compare"><span class="price-old">$ 67</span><span class="price-arrow">→</span><div class="price-new"><small>R$</small> 47</div></div>
+      <div class="price-compare"><span class="price-old">$ 37</span><span class="price-arrow">→</span><div class="price-new"><small>$</small> 9</div></div>
       <div class="price-saving">Acelera tu resultado — solo hoy</div>
       <div class="price-sub">Pago único • Acceso inmediato</div>
     </div>
@@ -176,12 +176,12 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   const p=new URLSearchParams(window.location.search),n=p.get('name');
   if(n)document.getElementById('user-name').textContent=decodeURIComponent(n);
   // Track purchase of main product
-  var purchaseValue = Number(p.get('value')) || 67;
+  var purchaseValue = Number(p.get('value')) || 17;
   var purchasePlan = p.get('plan') || 'vitalicio';
   var purchaseProduct = purchasePlan === 'mensal' ? 'vortx_mensal' : 'vortx_protocol';
   if(window.vortxTrack) vortxTrack('purchase',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
   // Track upsell view
-  if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:47});
+  if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:9});
 
   document.getElementById('btn-upsell').addEventListener('click',function(e){
     e.preventDefault();
