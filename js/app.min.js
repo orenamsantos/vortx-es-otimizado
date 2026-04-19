@@ -323,9 +323,10 @@
 
   function renderWhatsappInput(step) {
     return `
-      <div class="input-group">
+      <div class="input-group" style="padding:0;">
         <div class="whatsapp-input-wrapper">
           <select class="whatsapp-ddi-select" id="ddi-select" aria-label="Código de país">
+            <optgroup label="── América Latina ──">
             <option value="+52">🇲🇽 +52</option>
             <option value="+57">🇨🇴 +57</option>
             <option value="+54">🇦🇷 +54</option>
@@ -342,9 +343,43 @@
             <option value="+591">🇧🇴 +591</option>
             <option value="+595">🇵🇾 +595</option>
             <option value="+598">🇺🇾 +598</option>
-            <option value="+34">🇪🇸 +34</option>
-            <option value="+1">🇺🇸 +1</option>
+            <option value="+53">🇨🇺 +53</option>
+            <option value="+1-809">🇩🇴 +1-809</option>
+            <option value="+509">🇭🇹 +509</option>
+            <option value="+592">🇬🇾 +592</option>
+            <option value="+597">🇸🇷 +597</option>
             <option value="+55">🇧🇷 +55</option>
+            </optgroup>
+            <optgroup label="── Europa ──">
+            <option value="+34">🇪🇸 +34</option>
+            <option value="+351">🇵🇹 +351</option>
+            <option value="+39">🇮🇹 +39</option>
+            <option value="+33">🇫🇷 +33</option>
+            <option value="+49">🇩🇪 +49</option>
+            <option value="+44">🇬🇧 +44</option>
+            <option value="+31">🇳🇱 +31</option>
+            <option value="+32">🇧🇪 +32</option>
+            <option value="+41">🇨🇭 +41</option>
+            <option value="+43">🇦🇹 +43</option>
+            <option value="+48">🇵🇱 +48</option>
+            <option value="+40">🇷🇴 +40</option>
+            <option value="+30">🇬🇷 +30</option>
+            <option value="+420">🇨🇿 +420</option>
+            <option value="+36">🇭🇺 +36</option>
+            <option value="+46">🇸🇪 +46</option>
+            <option value="+47">🇳🇴 +47</option>
+            <option value="+45">🇩🇰 +45</option>
+            <option value="+358">🇫🇮 +358</option>
+            <option value="+353">🇮🇪 +353</option>
+            <option value="+380">🇺🇦 +380</option>
+            <option value="+7">🇷🇺 +7</option>
+            </optgroup>
+            <optgroup label="── Otros ──">
+            <option value="+1">🇺🇸 +1</option>
+            <option value="+1-CA">🇨🇦 +1</option>
+            <option value="+61">🇦🇺 +61</option>
+            <option value="+64">🇳🇿 +64</option>
+            </optgroup>
           </select>
           <input type="tel" class="input-field whatsapp-field" id="input-${step.field.name}"
             name="${step.field.name}" placeholder="000 000 0000"
