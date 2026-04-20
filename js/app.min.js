@@ -1100,7 +1100,7 @@
       var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
       var userName = encodeURIComponent(state.userData.name || "");
       var baseUrl = "https://pay.hotmart.com/U105461265V?checkoutMode=10";
-      var checkoutUrl = baseUrl + "?name=" + userName + "&plan=" + plan + "&value=" + price;
+      var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + plan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
       window.location.href = checkoutUrl;
     });
