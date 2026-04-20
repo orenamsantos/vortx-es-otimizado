@@ -1099,7 +1099,7 @@
       var plan = state.selectedPlan;
       var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
       var userName = encodeURIComponent(state.userData.name || "");
-      var baseUrl = plan === "vitalicio" ? "https://checkout.ticto.app/O72D72A5C" : "https://checkout.ticto.app/O67CE2B50";
+      var baseUrl = "https://pay.hotmart.com/U105461265V";
       var checkoutUrl = baseUrl + "?name=" + userName + "&plan=" + plan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
       window.location.href = checkoutUrl;
