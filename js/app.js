@@ -1025,11 +1025,13 @@
       const isFeatured  = plan.id === "vitalicio";
       const isSelected  = plan.id === state.selectedPlan;
       const isDowngrade = plan.id === "mensal";
+      const isAnchor    = plan.isAnchor === true;
       const featList    = plan.features.map((f) => `<li>${f}</li>`).join("");
       return `
-        <div class="pricing-plan ${isFeatured ? "featured" : ""} ${isSelected ? "selected" : ""} ${isDowngrade ? "plan-downgrade" : ""}" data-plan="${plan.id}">
-          ${plan.badge ? `<div class="pricing-plan-badge">${plan.badge}</div>` : ""}
+        <div class="pricing-plan ${isFeatured ? "featured" : ""} ${isSelected ? "selected" : ""} ${isDowngrade ? "plan-downgrade" : ""} ${isAnchor ? "plan-anchor" : ""}" data-plan="${plan.id}">
+          ${plan.badge ? `<div class="pricing-plan-badge-top">${plan.badge}</div>` : ""}
           ${isDowngrade ? `<div class="plan-downgrade-label">⚠ Versión limitada — sin protocolo vascular</div>` : ""}
+          ${isAnchor ? `<div class="plan-anchor-label">⚠ Versión limitada — sin protocolo completo</div>` : ""}
           <div class="pricing-plan-header">
             <div class="pricing-plan-name">${plan.name}</div>
             <div class="pricing-plan-price-container">
@@ -1082,6 +1084,12 @@
         <p class="guarantee-text">${PRICING_DATA.guarantee.text}</p>
       </div>
 
+      <div class="testimonial-pre-cta">
+        <div class="testimonial-pre-cta-stars">★★★★★</div>
+        <p class="testimonial-pre-cta-text">"En el día 14 mi esposa me miró distinto. No le dije nada. No tuve que hacerlo."</p>
+        <span class="testimonial-pre-cta-author">— Roberto M., 44 años · México</span>
+      </div>
+
       <div class="checkout-cta-block">
         <button class="btn-cta btn-cta--checkout" id="btn-checkout">${buildCheckoutCta(state.selectedPlan)}</button>
         <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía de 30 días</p>
@@ -1099,7 +1107,9 @@
       var plan = state.selectedPlan;
       var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
       var userName = encodeURIComponent(state.userData.name || "");
-      var baseUrl = "https://pay.hotmart.com/U105461265V?checkoutMode=10";
+      var baseUrl = plan === "esencial"
+        ? "https://pay.hotmart.com/U105461265V?off=tjhgh4hs&checkoutMode=10"
+        : "https://pay.hotmart.com/U105461265V?checkoutMode=10";
       var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + plan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
       window.location.href = checkoutUrl;
@@ -1121,9 +1131,9 @@
           plansEl.innerHTML = `
             <div class="timer-expired-block">
               <div class="timer-expired-icon">⏰</div>
-              <p class="timer-expired-title">Esse preço acabou.</p>
-              <p class="timer-expired-text">O valor de R$67 não está mais disponível e o protocolo voltou para R$197.</p>
-              <button class="btn-cta" id="btn-recover-offer">QUERO MAIS 10 MINUTOS COM O PREÇO ESPECIAL</button>
+              <p class="timer-expired-title">Este precio ya no está disponible.</p>
+              <p class="timer-expired-text">El precio especial expiró y el protocolo volvió a $197.</p>
+              <button class="btn-cta" id="btn-recover-offer">QUIERO 10 MINUTOS MÁS CON EL PRECIO ESPECIAL</button>
             </div>
           `;
           document.getElementById("btn-recover-offer").addEventListener("click", () => {

@@ -356,6 +356,25 @@ const PRICING_DATA={
   },
   plans:[
     {
+      id:"esencial",
+      name:"ACCESO ESENCIAL",
+      price:9,
+      originalPrice:97,
+      period:"pago único",
+      description:"Módulo vascular básico únicamente",
+      badge:"",
+      ctaLabel:"QUIERO EL ACCESO ESENCIAL",
+      ctaTag:"VERSIÓN BÁSICA",
+      isAnchor:true,
+      features:[
+        "Protocolo vascular básico — módulo 1 únicamente",
+        "Sin módulo de duración ni control avanzado",
+        "Sin protocolo de sueño hormonal",
+        "Sin guía de eliminación de grasa estrogénica",
+        "Sin actualizaciones futuras incluidas"
+      ]
+    },
+    {
       id:"vitalicio",
       name:"PROTOCOLO COMPLETO — ACCESO DE POR VIDA",
       price:17,
