@@ -2,7 +2,8 @@
 <html lang="es">
 <head>
 <!-- Meta Pixel: inicializado pelo tracking.js — NÃO duplicar aqui -->
-<!-- Purchase event: disparado via vortxTrack('purchase') no script de body -->
+<!-- Purchase: enviado APENAS pela Hotmart CAPI (server-side). -->
+<!-- Aqui disparamos purchase_confirmed (evento custom) para não duplicar. -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VORTX — Compra Confirmada</title>
@@ -181,7 +182,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   var purchaseValue = Number(p.get('value')) || 17;
   var purchasePlan = p.get('plan') || 'vitalicio';
   var purchaseProduct = purchasePlan === 'mensal' ? 'vortx_mensal' : 'vortx_protocol';
-  if(window.vortxTrack) vortxTrack('purchase',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
+  if(window.vortxTrack) vortxTrack('purchase_confirmed',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
   // Track upsell view
   if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:9});
 
