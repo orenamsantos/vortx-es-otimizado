@@ -1225,17 +1225,31 @@
     rebindPlanSelection(buildCheckoutCta);
 
     document.getElementById("btn-checkout").addEventListener("click", () => {
-      var plan = PRICING_DATA.plans.find(function(p) { return p.id === state.selectedPlan; });
-      if (window.vortxTrack) vortxTrack("begin_checkout", { value: plan ? plan.price : 0, currency: "USD", plan: state.selectedPlan });
-      var plan = state.selectedPlan;
-      var price = PRICING_DATA.plans.find(function(p) { return p.id === plan; }).price;
+      // Força carga do tracking antes de navegar para o checkout externo
+      if (window.vortxEnsureTracking) window.vortxEnsureTracking();
+
+      var selectedPlan = state.selectedPlan;
+      var plan = PRICING_DATA.plans.find(function (p) { return p.id === selectedPlan; });
+      if (window.vortxTrack) {
+        vortxTrack("begin_checkout", {
+          value: plan ? plan.price : 0,
+          currency: "USD",
+          plan: selectedPlan
+        });
+      }
+
+      var price = plan ? plan.price : 0;
       var userName = encodeURIComponent(state.userData.name || "");
-      var baseUrl = plan === "esencial"
+      var baseUrl = selectedPlan === "esencial"
         ? "https://pay.hotmart.com/U105461265V?off=tjhgh4hs&checkoutMode=10"
         : "https://pay.hotmart.com/U105461265V?checkoutMode=10";
-      var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + plan + "&value=" + price;
+      var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + selectedPlan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
-      window.location.href = checkoutUrl;
+
+      // Pequena janela para o browser despachar o evento antes do redirect
+      setTimeout(function () {
+        window.location.href = checkoutUrl;
+      }, 250);
     });
     startPricingTimer();
   }
