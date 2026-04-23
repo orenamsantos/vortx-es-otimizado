@@ -228,6 +228,13 @@
   document.addEventListener("scroll",     onInteraction, { once: true, passive: true });
   document.addEventListener("touchstart", onInteraction, { once: true, passive: true });
 
+
+  // Permite forçar carregamento imediato do tracking em ações críticas (ex.: checkout)
+  window.vortxEnsureTracking = function () {
+    clearTimeout(loadTimer);
+    loadPixels();
+  };
+
   // Consume pre-load queue from inline script
   if (window._vtq && window._vtq.length) {
     for (var i = 0; i < window._vtq.length; i++) {
