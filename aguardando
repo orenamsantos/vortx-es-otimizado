@@ -1,1 +1,644 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<!-- Meta Pixel: inicializado pelo tracking.js -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>VORTX — Pago en Proceso</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #0B0B12;
+  --bg2:       #101018;
+  --card:      rgba(255,255,255,.04);
+  --card-h:    rgba(255,255,255,.07);
+  --gold:      #C9A84C;
+  --gold-l:    #DFC373;
+  --gold-d:    #A68B3A;
+  --gold-glow: rgba(201,168,76,.12);
+  --gold-sub:  rgba(201,168,76,.06);
+  --txt:       #F0EDE6;
+  --txt2:      #9A978F;
+  --txt3:      #5C5A54;
+  --brd:       rgba(255,255,255,.06);
+  --brd-h:     rgba(255,255,255,.12);
+  --amber:     #D4940A;
+  --amber-bg:  rgba(212,148,10,.08);
+  --amber-brd: rgba(212,148,10,.2);
+  --r-card:    20px;
+  --r-btn:     50px;
+  --r-sm:      12px;
+  --r-md:      16px;
+  --ff-d:      'Playfair Display', Georgia, serif;
+  --ff-b:      'Inter', -apple-system, sans-serif;
+  --ff-m:      'JetBrains Mono', monospace;
+}
 
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { font-size: 16px; -webkit-font-smoothing: antialiased; }
+body {
+  font-family: var(--ff-b);
+  background: var(--bg);
+  color: var(--txt);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 10% 20%, rgba(22,33,62,.3) 0, transparent 50%),
+    radial-gradient(ellipse at 90% 80%, rgba(201,168,76,.04) 0, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.page {
+  position: relative;
+  z-index: 1;
+  max-width: 540px;
+  margin: 0 auto;
+  padding: 0 20px 60px;
+}
+
+/* ── HEADER ── */
+.header {
+  text-align: center;
+  padding: 36px 0 32px;
+  border-bottom: 1px solid var(--brd);
+}
+.logo {
+  font-family: var(--ff-b);
+  font-weight: 700;
+  font-size: 1rem;
+  letter-spacing: 7px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 28px;
+}
+.logo span {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+
+/* ── ÍCONE CENTRAL ── */
+.icon-wrap {
+  width: 80px; height: 80px;
+  border-radius: 50%;
+  background: var(--amber-bg);
+  border: 2px solid var(--amber-brd);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 20px;
+  animation: breathe 2.5s ease-in-out infinite;
+}
+.icon-wrap svg {
+  width: 36px; height: 36px;
+}
+@keyframes breathe {
+  0%, 100% { transform: scale(1);    box-shadow: 0 0 0   0   rgba(212,148,10,.15); }
+  50%       { transform: scale(1.05); box-shadow: 0 0 24px 8px rgba(212,148,10,.12); }
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 18px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-brd);
+  border-radius: var(--r-btn);
+  font-family: var(--ff-m);
+  font-size: .65rem;
+  font-weight: 700;
+  color: var(--amber);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+.status-badge::before {
+  content: '';
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--amber);
+  animation: blink 1.4s ease-in-out infinite;
+}
+@keyframes blink {
+  0%, 100% { opacity: .3; }
+  50%       { opacity: 1;  }
+}
+
+.header h1 {
+  font-family: var(--ff-d);
+  font-weight: 700;
+  font-size: clamp(1.5rem, 5vw, 2rem);
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.header h1 em {
+  color: var(--gold-l);
+  font-style: normal;
+}
+.header p {
+  font-size: .92rem;
+  color: var(--txt2);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.65;
+}
+
+/* ── INSTRUCIONES PIX / BOLETO ── */
+.instructions {
+  padding: 28px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.instructions-title {
+  font-family: var(--ff-m);
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: 2.5px;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-bottom: 4px;
+}
+
+.step-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 18px 20px;
+  background: var(--card);
+  border: 1px solid var(--brd);
+  border-radius: var(--r-card);
+  transition: border-color .25s;
+}
+.step-card:hover { border-color: var(--brd-h); }
+
+.step-num {
+  font-family: var(--ff-m);
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--gold);
+  width: 36px; height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--gold-sub);
+  border-radius: var(--r-sm);
+  flex-shrink: 0;
+}
+.step-body {}
+.step-title {
+  font-weight: 600;
+  font-size: .9rem;
+  margin-bottom: 3px;
+}
+.step-desc {
+  font-size: .78rem;
+  color: var(--txt3);
+  line-height: 1.5;
+}
+
+/* ── ALERTA DE TIEMPO ── */
+.time-alert {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-brd);
+  border-radius: var(--r-md);
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+}
+.time-alert-icon {
+  font-size: 1.3rem;
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.time-alert-text {
+  font-size: .84rem;
+  color: var(--txt2);
+  line-height: 1.6;
+}
+.time-alert-text strong {
+  color: var(--amber);
+  display: block;
+  margin-bottom: 4px;
+  font-size: .85rem;
+}
+
+/* ── CONTADOR ── */
+.timer-block {
+  margin-top: 24px;
+  text-align: center;
+  padding: 22px;
+  background: var(--card);
+  border: 1px solid var(--brd);
+  border-radius: var(--r-card);
+}
+.timer-label {
+  font-size: .7rem;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-bottom: 10px;
+}
+.timer-display {
+  font-family: var(--ff-m);
+  font-size: 2.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 4px;
+  line-height: 1;
+}
+.timer-sub {
+  font-size: .72rem;
+  color: var(--txt3);
+  margin-top: 8px;
+}
+
+/* ── DIVIDER ── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 32px 0;
+  color: var(--txt3);
+  font-size: .65rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+.divider::before, .divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--brd), transparent);
+}
+
+/* ── FAQ ── */
+.faq { display: flex; flex-direction: column; gap: 10px; }
+.faq-item {
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--brd);
+  border-radius: var(--r-card);
+}
+.faq-q {
+  font-weight: 600;
+  font-size: .85rem;
+  margin-bottom: 6px;
+  color: var(--txt);
+}
+.faq-a {
+  font-size: .78rem;
+  color: var(--txt3);
+  line-height: 1.6;
+}
+
+/* ── SOPORTE ── */
+.support-block {
+  margin-top: 24px;
+  padding: 20px;
+  background: var(--gold-sub);
+  border: 1px solid rgba(201,168,76,.15);
+  border-radius: var(--r-md);
+  text-align: center;
+}
+.support-block p {
+  font-size: .82rem;
+  color: var(--txt2);
+  margin-bottom: 12px;
+  line-height: 1.55;
+}
+.btn-support {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, var(--gold), var(--gold-d));
+  color: var(--bg);
+  font-family: var(--ff-b);
+  font-weight: 700;
+  font-size: .78rem;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: var(--r-btn);
+  cursor: pointer;
+  text-decoration: none;
+  transition: opacity .2s;
+}
+.btn-support:hover { opacity: .88; }
+
+/* ── FOOTER ── */
+.footer {
+  text-align: center;
+  padding: 32px 0 0;
+  border-top: 1px solid var(--brd);
+  margin-top: 40px;
+}
+.footer-logo {
+  font-family: var(--ff-b);
+  font-weight: 700;
+  font-size: .85rem;
+  letter-spacing: 6px;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+}
+.footer-logo span {
+  display: inline-block;
+  width: 5px; height: 5px;
+  background: var(--gold);
+  border-radius: 50%;
+  margin-left: 2px;
+  vertical-align: middle;
+}
+.footer p { font-size: .68rem; color: var(--txt3); }
+
+/* ── PIX específico ── */
+.pix-section {
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 4px;
+}
+.pix-section.visible { display: flex; }
+.pix-code-wrap {
+  padding: 16px 20px;
+  background: var(--card);
+  border: 1px solid var(--brd);
+  border-radius: var(--r-md);
+}
+.pix-code-label {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--txt3);
+  margin-bottom: 8px;
+}
+.pix-code-value {
+  font-family: var(--ff-m);
+  font-size: .78rem;
+  color: var(--gold-l);
+  word-break: break-all;
+  line-height: 1.6;
+}
+.btn-copy {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 14px;
+  background: transparent;
+  border: 1px solid var(--gold-d);
+  border-radius: var(--r-btn);
+  color: var(--gold);
+  font-family: var(--ff-b);
+  font-weight: 600;
+  font-size: .82rem;
+  letter-spacing: .8px;
+  cursor: pointer;
+  transition: all .2s;
+  margin-top: 4px;
+}
+.btn-copy:hover { background: var(--gold-sub); }
+.btn-copy.copied { color: #4CAF6A; border-color: rgba(76,175,106,.4); }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="logo">VORTX<span></span></div>
+
+    <div class="icon-wrap">
+      <!-- reloj de arena animado -->
+      <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M10 4h16M10 32h16M12 4v6l6 8-6 8v6M24 4v6l-6 8 6 8v6" stroke="#D4940A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="18" cy="18" r="3" fill="#D4940A" opacity=".5">
+          <animate attributeName="opacity" values="0.3;1;0.3" dur="1.4s" repeatCount="indefinite"/>
+        </circle>
+      </svg>
+    </div>
+
+    <div class="status-badge">Pago en verificación</div>
+
+    <h1>Tu pedido está siendo<br><em>procesado</em></h1>
+    <p id="header-sub">Recibimos tu solicitud de pago. En cuanto se confirme, el acceso al protocolo se envía automáticamente a tu <strong>email de compra</strong>.</p>
+  </div>
+
+  <!-- INSTRUCCIONES -->
+  <div class="instructions">
+    <p class="instructions-title">¿Qué hacer ahora?</p>
+
+    <!-- PIX (mostrado se for PIX) -->
+    <div class="pix-section" id="pix-section">
+      <div class="pix-code-wrap" id="pix-code-wrap" style="display:none;">
+        <div class="pix-code-label">Código PIX Copia e Cola</div>
+        <div class="pix-code-value" id="pix-code-value">—</div>
+        <button class="btn-copy" id="btn-copy" onclick="copyPix()">
+          📋 Copiar código PIX
+        </button>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <div class="step-title">Abre tu app bancaria</div>
+          <div class="step-desc">Ve a la opción PIX → Pagar con código → Pega el código de arriba.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <div class="step-title">Confirma el pago</div>
+          <div class="step-desc">El valor es exactamente el que viste al finalizar la compra.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <div class="step-title">Espera la confirmación</div>
+          <div class="step-desc">El acceso llega a tu email de compra en menos de 5 minutos después del pago.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- General / Tarjeta en análisis -->
+    <div id="general-steps">
+      <div class="step-card">
+        <div class="step-num">01</div>
+        <div class="step-body">
+          <div class="step-title">No cierres esta pestaña</div>
+          <div class="step-desc">Si pagaste, la confirmación llega en minutos. Revisa tu email de compra.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">02</div>
+        <div class="step-body">
+          <div class="step-title">Revisa tu email de compra</div>
+          <div class="step-desc">El acceso al protocolo se envía automáticamente al número que ingresaste en el quiz.</div>
+        </div>
+      </div>
+      <div class="step-card">
+        <div class="step-num">03</div>
+        <div class="step-body">
+          <div class="step-title">Si el pago no llega en 30 min</div>
+          <div class="step-desc">Contacta nuestro soporte con tu número de pedido. Resolvemos en el momento.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TIMER PIX -->
+  <div class="timer-block" id="timer-block">
+    <div class="timer-label">Tiempo para completar el pago</div>
+    <div class="timer-display" id="countdown">30:00</div>
+    <div class="timer-sub">El código expira si no se usa en este tiempo</div>
+  </div>
+
+  <!-- ALERTA -->
+  <div class="time-alert">
+    <div class="time-alert-icon">⚠️</div>
+    <div class="time-alert-text">
+      <strong>Tu acceso está reservado</strong>
+      Una vez confirmado el pago, el protocolo se libera de forma inmediata. El precio especial está garantizado para este pedido.
+    </div>
+  </div>
+
+  <div class="divider">Preguntas frecuentes</div>
+
+  <!-- FAQ -->
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">¿Cuánto tiempo tarda en llegar el acceso?</div>
+      <div class="faq-a">Para pagos con tarjeta aprobados al instante: menos de 5 minutos. Para PIX: hasta 5 minutos después de pagar. Para análisis de crédito: hasta 24 horas hábiles.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">Pagué pero no recibí nada. ¿Qué hago?</div>
+      <div class="faq-a">Verifica que el email que usaste en la compra esté correcto. Si pasaron más de 30 minutos y no llegó nada, revisa la carpeta de spam o contacta soporte con el número de tu pedido.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Puedo acceder desde el celular y la computadora?</div>
+      <div class="faq-a">Sí. El protocolo funciona en cualquier dispositivo. El acceso se envía por email y puedes abrirlo desde cualquier dispositivo.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">¿Qué pasa si quiero cancelar?</div>
+      <div class="faq-a">Tienes 30 días de garantía total. Si no estás satisfecho con los resultados, devolvemos el 100% sin preguntas.</div>
+    </div>
+  </div>
+
+  <!-- SOPORTE -->
+  <div class="support-block">
+    <p>¿Tuviste algún problema con el pago o tienes dudas? Nuestro equipo responde en menos de 10 minutos.</p>
+    <a href="https://wa.me/5565981389919?text=Hola,%20tuve%20un%20problema%20con%20mi%20pago%20de%20VORTX" class="btn-support" id="btn-support" target="_blank" rel="noopener">
+      💬 Contactar soporte ahora
+    </a>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-logo">VORTX<span></span></div>
+    <p>Protocolo de Reversión Vascular Masculina</p>
+  </div>
+
+</div>
+
+<!-- Tracking -->
+<script>window.vortxTrack=function(e,p){(window._vtq=window._vtq||[]).push({e:e,p:p||{}})};(window.requestIdleCallback||function(c){setTimeout(c,2000)})(function(){var s=document.createElement("script");s.src="js/tracking.min.js";document.body.appendChild(s)})</script>
+
+<script>
+(function () {
+  var p    = new URLSearchParams(window.location.search);
+  var name = p.get('name') ? decodeURIComponent(p.get('name')) : null;
+  var type = (p.get('type') || '').toLowerCase(); // 'pix' | 'boleto' | '' = análise
+  var pixCode = p.get('pix') || null;
+
+  // ── Personaliza o nome ─────────────────────────────────────
+  if (name) {
+    document.querySelector('.header h1').innerHTML =
+      name + ', tu pedido está siendo<br><em>procesado</em>';
+    document.getElementById('header-sub').textContent =
+      name + ', recibimos tu solicitud de pago. En cuanto se confirme, el acceso al protocolo se envía automáticamente a tu email de compra.';
+  }
+
+  // ── Adapta conteúdo ao tipo de pagamento ──────────────────
+  if (type === 'pix') {
+    document.getElementById('pix-section').classList.add('visible');
+    // Mostrar código PIX se vier na URL
+    if (pixCode) {
+      document.getElementById('pix-code-wrap').style.display = 'block';
+      document.getElementById('pix-code-value').textContent = decodeURIComponent(pixCode);
+    }
+    document.getElementById('general-steps').style.display = 'none';
+  } else if (type === 'analise') {
+    document.getElementById('timer-block').style.display = 'none';
+    document.querySelector('.instructions-title').textContent = 'Tu compra está en análisis';
+  } else {
+    // Cartão ou padrão — sem timer de PIX
+    document.getElementById('timer-block').style.display = 'none';
+  }
+
+  // ── Timer PIX 30 minutos ────────────────────────────────────
+  if (type === 'pix') {
+    var sec = 30 * 60;
+    var el  = document.getElementById('countdown');
+    var iv  = setInterval(function () {
+      sec--;
+      if (sec <= 0) { clearInterval(iv); el.textContent = '00:00'; el.style.color = '#C44B4B'; return; }
+      var m = Math.floor(sec / 60), s = sec % 60;
+      el.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+      if (sec <= 300) el.style.color = '#C44B4B'; // últimos 5min = vermelho
+    }, 1000);
+  }
+
+  // ── Tracking: página de aguardando (custom, não Purchase) ──
+  if (window.vortxTrack) {
+    vortxTrack('payment_pending', {
+      type:     type || 'unknown',
+      plan:     p.get('plan') || 'vitalicio',
+      value:    Number(p.get('value')) || 17,
+      currency: 'USD'
+    });
+  }
+})();
+
+// ── Copiar código PIX ─────────────────────────────────────────
+function copyPix() {
+  var code = document.getElementById('pix-code-value').textContent;
+  if (!code || code === '—') return;
+  navigator.clipboard.writeText(code).then(function () {
+    var btn = document.getElementById('btn-copy');
+    btn.textContent = '✓ Copiado';
+    btn.classList.add('copied');
+    setTimeout(function () {
+      btn.textContent = '📋 Copiar código PIX';
+      btn.classList.remove('copied');
+    }, 3000);
+  });
+}
+</script>
+
+</body>
+</html>
