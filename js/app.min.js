@@ -1224,32 +1224,65 @@
 
     rebindPlanSelection(buildCheckoutCta);
 
-    document.getElementById("btn-checkout").addEventListener("click", () => {
-      // Força carga do tracking antes de navegar para o checkout externo
-      if (window.vortxEnsureTracking) window.vortxEnsureTracking();
+    document.getElementById("btn-checkout").addEventListener("click", (ev) => {
+      ev.preventDefault();
 
       var selectedPlan = state.selectedPlan;
-      var plan = PRICING_DATA.plans.find(function (p) { return p.id === selectedPlan; });
-      if (window.vortxTrack) {
-        vortxTrack("begin_checkout", {
-          value: plan ? plan.price : 0,
+      var plan  = PRICING_DATA.plans.find(function (p) { return p.id === selectedPlan; });
+      var price = plan ? plan.price : 0;
+
+      // ── DISPARO SÍNCRONO DO InitiateCheckout ──────────────────
+      // vortxTrackSync força load do pixel E dispara fbq imediatamente.
+      // Retorna o event_id — fundamental para desduplicar com a Hotmart CAPI.
+      var eventId = null;
+      if (window.vortxTrackSync) {
+        eventId = window.vortxTrackSync("begin_checkout", {
+          value:    price,
           currency: "USD",
-          plan: selectedPlan
+          plan:     selectedPlan
         });
+      } else if (window.vortxTrack) {
+        // Fallback
+        vortxTrack("begin_checkout", { value: price, currency: "USD", plan: selectedPlan });
       }
 
-      var price = plan ? plan.price : 0;
+      // ── MONTAGEM DA URL COM ATRIBUIÇÃO ─────────────────────────
+      // Parâmetros nativos do quiz
       var userName = encodeURIComponent(state.userData.name || "");
-      var baseUrl = selectedPlan === "esencial"
+      var baseUrl  = selectedPlan === "esencial"
         ? "https://pay.hotmart.com/U105461265V?off=tjhgh4hs&checkoutMode=10"
         : "https://pay.hotmart.com/U105461265V?checkoutMode=10";
       var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + selectedPlan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
 
-      // Pequena janela para o browser despachar o evento antes do redirect
+      // Atribuição Meta Ads (fbclid, fbp, fbc) + UTMs
+      // Hotmart lê fbclid nativamente; fbp/fbc aparecem no xcod/sck para CAPI
+      try {
+        if (window.vortxGetAttribution) {
+          var attr = window.vortxGetAttribution();
+          // fbclid é o parâmetro que a Hotmart reconhece nativamente
+          if (attr.fbclid) checkoutUrl += "&fbclid=" + encodeURIComponent(attr.fbclid);
+          // Passamos fbp/fbc + event_id dentro de xcod (string arbitrária que volta no postback)
+          var xcodParts = [];
+          if (eventId)   xcodParts.push("eid=" + eventId);
+          if (attr.fbp)  xcodParts.push("fbp=" + attr.fbp);
+          if (attr.fbc)  xcodParts.push("fbc=" + attr.fbc);
+          if (xcodParts.length) {
+            checkoutUrl += "&xcod=" + encodeURIComponent(xcodParts.join("|"));
+          }
+          // UTMs (Hotmart também lê sck/src)
+          if (attr.utm_source)   checkoutUrl += "&sck=" + encodeURIComponent(attr.utm_source);
+          if (attr.utm_campaign) checkoutUrl += "&src=" + encodeURIComponent(attr.utm_campaign);
+        }
+      } catch (e) {}
+
+      // ── DELAY AUMENTADO: pixel precisa de tempo para flushar ──
+      // Mínimo 900ms em conexão 4G — o fbq dispara o request em ~300-700ms
+      // dependendo se o script do Facebook já estava carregado.
+      // Trade-off aceitável: 900ms vs evento perdido.
       setTimeout(function () {
         window.location.href = checkoutUrl;
-      }, 250);
+      }, 900);
     });
     startPricingTimer();
   }
