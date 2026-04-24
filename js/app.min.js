@@ -270,6 +270,10 @@
         if (window.vortxTrack) vortxTrack("quiz_start");
         showScreen("quiz");
         renderStep();
+        // History API: marca entrada no quiz para interceptar botão voltar
+        try {
+          history.pushState({ vortx: "quiz", stepIndex: state.currentStepIndex }, "");
+        } catch (err) {}
       }
     });
     document.getElementById("btn-back").addEventListener("click", goBack);
@@ -292,10 +296,55 @@
 
   function goBack() {
     if (state.currentStepIndex > 0) {
-      state.currentStepIndex--;
-      renderStep();
+      // Usa history.back() — isso dispara popstate que faz o rewind
+      try {
+        history.back();
+      } catch (err) {
+        // Fallback se History API falhar
+        state.currentStepIndex--;
+        renderStep();
+      }
     }
   }
+
+  // ── POPSTATE LISTENER — Intercepta botão voltar do navegador ──
+  window.addEventListener("popstate", function (ev) {
+    // Prioridade 1: Se tem lightbox aberto, fecha ele
+    var lightbox = document.querySelector(".wa-lightbox");
+    if (lightbox) {
+      lightbox.remove();
+      return;
+    }
+
+    // Prioridade 2: Se tem resume banner aberto, ignora
+    var resumeBanner = document.querySelector(".resume-banner");
+    if (resumeBanner) {
+      // Re-empurra estado do quiz para não sair
+      try {
+        history.pushState({ vortx: "quiz", stepIndex: state.currentStepIndex }, "");
+      } catch (err) {}
+      return;
+    }
+
+    // Prioridade 3: Se está no quiz, navega para step anterior
+    if (state.currentScreen === "quiz") {
+      var targetIndex = ev.state && ev.state.vortx === "quiz"
+        ? ev.state.stepIndex
+        : Math.max(0, state.currentStepIndex - 1);
+      
+      if (targetIndex >= 0 && targetIndex < stepOrder.length) {
+        state.currentStepIndex = targetIndex;
+        renderStep();
+      } else if (targetIndex < 0 || !ev.state) {
+        // Voltou além do primeiro step → volta pro gate
+        showScreen("gate");
+        // Re-empurra estado neutro para manter o controle
+        try {
+          history.pushState({ vortx: "gate" }, "");
+        } catch (err) {}
+      }
+    }
+  });
 
   // ── RENDER STEP ───────────────────────────────────────────
   function renderStep() {
@@ -914,6 +963,11 @@
       return;
     }
 
+    // History API: push state para cada step (botão voltar navega entre steps)
+    try {
+      history.pushState({ vortx: "quiz", stepIndex: state.currentStepIndex }, "");
+    } catch (err) {}
+
     const inter = INTERSTITIALS.find((i) => i.afterStep === (currentStep ? currentStep.id : null));
     if (inter) showInterstitial(inter);
     else renderStep();
@@ -1417,7 +1471,7 @@
     animateSocialCounter();
 
 
-    // WhatsApp testimonial lightbox (tap to enlarge)
+    // WhatsApp testimonial lightbox (tap to enlarge) — com suporte ao botão voltar
     document.querySelectorAll(".wa-placeholder img").forEach(function(img) {
       img.addEventListener("click", function(ev) {
         if (img.style.display === "none") return;
@@ -1426,8 +1480,18 @@
         overlay.className = "wa-lightbox";
         overlay.innerHTML = '<button class="wa-lightbox-close" aria-label="Cerrar">✕</button><img src="' + img.src + '" alt="">';
         document.body.appendChild(overlay);
-        var close = function() { overlay.remove(); };
-        overlay.addEventListener("click", close);
+
+        // Push state para botão voltar fechar o lightbox em vez de sair do site
+        try { history.pushState({ vortx: "lightbox" }, ""); } catch (err) {}
+
+        var closeLightbox = function() {
+          // Se o state atual é o do lightbox, volta (dispara popstate que remove o overlay)
+          if (history.state && history.state.vortx === "lightbox") {
+            try { history.back(); return; } catch (err) {}
+          }
+          overlay.remove();
+        };
+        overlay.addEventListener("click", closeLightbox);
       });
     });
 
