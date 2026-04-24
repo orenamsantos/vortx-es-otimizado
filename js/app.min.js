@@ -741,7 +741,7 @@
         }
 
         // Validação internacional genérica
-        if (digits.length > maxLen) return "Número muito longo";
+        if (digits.length > maxLen) return "Número demasiado largo";
         if (/^(\d)\1+$/.test(digits)) return "Número inválido";
         return null;
       }
@@ -768,18 +768,42 @@
         const [minLen, maxLen] = DDI_LENGTHS[currentDdi] || [7, 13];
         const errorMsg = validateWhatsappIntl(digits);
         const complete = digits.length >= minLen && digits.length <= maxLen && !errorMsg;
+        const isOptional = step.optional === true;
 
+        // Se opcional: mostra erro só se começou a digitar
         showWhatsappError(complete || digits.length === 0 ? null : errorMsg);
-        if (btnContinue) btnContinue.disabled = !complete;
+
+        // Se opcional: botão nunca fica disabled.
+        // Se obrigatório: botão só habilita com número completo.
+        if (btnContinue) {
+          btnContinue.disabled = isOptional ? false : !complete;
+          updateContinueLabel(complete);
+        }
 
         if (complete) {
-          // DDI limpo: remove sufixos como "-CA", "-809"
           const cleanDdi = currentDdi.replace(/-\w+$/, "");
           state.userData.whatsapp = `${cleanDdi}${digits}`;
         } else {
           state.userData.whatsapp = "";
         }
         state.answers[step.id] = state.userData.whatsapp;
+      }
+
+      // Altera o texto do botão Continuar conforme o lead preenche ou não
+      function updateContinueLabel(hasValidNumber) {
+        if (!btnContinue || !step.optional) return;
+        const label = btnContinue.querySelector(".btn-label") || btnContinue;
+        if (hasValidNumber) {
+          label.textContent = "ENVIAR POR WHATSAPP Y VER DIAGNÓSTICO";
+        } else {
+          label.textContent = "VER MI DIAGNÓSTICO SIN WHATSAPP";
+        }
+      }
+
+      // Init: se step é opcional, já começa com botão ativo e label "ver sin whatsapp"
+      if (step.optional && btnContinue) {
+        btnContinue.disabled = false;
+        updateContinueLabel(false);
       }
 
       // ── Listener: input do campo ──────────────────────────────────────

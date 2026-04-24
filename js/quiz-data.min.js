@@ -1,8 +1,8 @@
 const BRAND={name:"VORTX",tagline:"Recuperación de la Masculinidad",year:(new Date).getFullYear()},
 
 GATE_DATA={
-  headline:"Tu cuerpo ya no responde como antes de los 35 — y no es la edad.",
-  subheadline:"Un médico de Washington descubrió la causa real y el método casero que la revierte en 60 días. Haz el test de 2 minutos y descubre tu nivel exacto.",
+  headline:"El problema que ningún médico te explicó sobre los hombres después de los 35.",
+  subheadline:"Un cirujano de Washington identificó la causa real — y el protocolo casero que la revierte en 60 días. Haz el test de 2 minutos y descubre tu nivel exacto.",
   cta:"EMPEZAR EL DIAGNÓSTICO",
   timerStrip:"Test anónimo de 2 minutos. El resultado te va a sorprender.",
   socialProof:"17.483 hombres ya revertieron. Resultado promedio: 18 días.",
@@ -168,11 +168,12 @@ STEPS=[
   },
   {
     id:11,phase:5,type:"whatsapp-input",
-    question:"Ya casi, {name}. ¿A dónde te envío tu resultado?",
-    microcopy:"Tu diagnóstico es personal. Te lo mando directo a tu celular.",
+    question:"Tu diagnóstico está listo, {name}.",
+    microcopy:"¿Quieres que te lo envíe también por WhatsApp para guardarlo? Es opcional — puedes ver el resultado sin esto.",
     field:{name:"whatsapp",placeholder:"+52 000 000 0000"},
-    optIn:{text:"Acepto recibir mi diagnóstico y contenido exclusivo por WhatsApp"},
-    privacySeal:"🔒 Tu número no será compartido con nadie. Total confidencialidad.",
+    optIn:{text:"Sí, enviarme el resumen por WhatsApp (opcional)"},
+    privacySeal:"🔒 Un único mensaje. Sin spam. Total confidencialidad.",
+    optional:true,
     weight:0
   },
   {
