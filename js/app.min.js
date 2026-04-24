@@ -14,6 +14,7 @@
 
   // ── STATE ─────────────────────────────────────────────────
   const state = {
+    exitIntentShown: false,
     currentScreen: "gate",
     currentStepIndex: 0,
     answers: {},
@@ -1470,6 +1471,9 @@
     // Animated social counter
     animateSocialCounter();
 
+    // Exit intent popup (desktop mouseleave + mobile scroll up detection)
+    setupExitIntent();
+
 
     // WhatsApp testimonial lightbox (tap to enlarge) — com suporte ao botão voltar
     document.querySelectorAll(".wa-placeholder img").forEach(function(img) {
@@ -1497,6 +1501,147 @@
 
     rebindPlanSelection(buildCheckoutCta);
 
+
+
+    // ── EXIT INTENT POPUP ─────────────────────────────────────
+    // Oferta A (recomendada): guardar diagnóstico por 24h SEM desconto.
+    // Captura WhatsApp/email para recovery. NÃO treina o lead a esperar desconto.
+    function setupExitIntent() {
+      if (state.exitIntentShown) return;
+      if (sessionStorage.getItem("vx_exit_shown_v1")) return;
+
+      var fired = false;
+      function fire() {
+        if (fired) return;
+        fired = true;
+        state.exitIntentShown = true;
+        try { sessionStorage.setItem("vx_exit_shown_v1", "1"); } catch (e) {}
+        showExitIntentPopup();
+      }
+
+      // DESKTOP: detecta mouse saindo do topo da viewport
+      var mouseLeaveHandler = function (ev) {
+        if (ev.clientY <= 0) fire();
+      };
+      document.addEventListener("mouseleave", mouseLeaveHandler);
+
+      // MOBILE: detecta scroll rápido pra cima após chegar ao final
+      var lastY = window.scrollY;
+      var reachedBottom = false;
+      var scrollHandler = function () {
+        var currentY = window.scrollY;
+        var pct = (currentY + window.innerHeight) / document.body.scrollHeight;
+        if (pct > 0.70) reachedBottom = true;
+        if (reachedBottom && lastY - currentY > 45) {
+          // scroll UP rápido depois de ter descido → intent de sair
+          fire();
+        }
+        lastY = currentY;
+      };
+      window.addEventListener("scroll", scrollHandler, { passive: true });
+
+      // MOBILE FALLBACK: tempo longo parado sem scroll (60s) na pricing
+      setTimeout(function () {
+        if (!fired && window.scrollY < 200) fire();
+      }, 60000);
+    }
+
+    function showExitIntentPopup() {
+      if (document.getElementById("vx-exit-popup")) return;
+
+      var userName = (state.userData && state.userData.name) || "";
+      var prefillWhatsapp = (state.userData && state.userData.whatsapp) || "";
+
+      var popup = document.createElement("div");
+      popup.id = "vx-exit-popup";
+      popup.className = "vx-exit-popup";
+      popup.innerHTML = `
+        <div class="vep-card">
+          <button class="vep-close" aria-label="Cerrar">✕</button>
+          <div class="vep-icon">⏸</div>
+          <div class="vep-title">Espera${userName ? ", " + escapeHtml(userName) : ""} — antes de irte</div>
+          <div class="vep-subtitle">¿Puedo hacer una cosa por ti?</div>
+          <div class="vep-body">
+            <p><strong>Te guardo tu diagnóstico gratis por 24 horas.</strong></p>
+            <p>El precio de <span class="vep-price-now">$17</span> sigue disponible si decides volver. Después de eso, regresa a <span class="vep-price-old">$97</span>.</p>
+            <p class="vep-note">Te lo mando a tu WhatsApp — sin spam, un único mensaje.</p>
+          </div>
+          <form class="vep-form" id="vep-form">
+            <input type="tel" id="vep-whatsapp" placeholder="Tu WhatsApp (con código de país)" value="${prefillWhatsapp ? escapeHtml(prefillWhatsapp) : ""}" required>
+            <button type="submit" class="vep-btn">GUÁRDAME EL DIAGNÓSTICO</button>
+          </form>
+          <button class="vep-skip" id="vep-skip">No gracias, cerrar</button>
+          <div class="vep-footer">
+            <span>🔒 100% privado</span>
+            <span>•</span>
+            <span>Un único mensaje</span>
+            <span>•</span>
+            <span>Sin spam</span>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(popup);
+
+      // Track
+      if (window.vortxTrack) vortxTrack("exit_intent_shown");
+
+      var closePopup = function () {
+        popup.classList.add("vep-closing");
+        setTimeout(function () { popup.remove(); }, 250);
+      };
+
+      popup.querySelector(".vep-close").addEventListener("click", closePopup);
+      popup.querySelector("#vep-skip").addEventListener("click", function () {
+        if (window.vortxTrack) vortxTrack("exit_intent_decline");
+        closePopup();
+      });
+
+      // Click no overlay (fora do card) fecha
+      popup.addEventListener("click", function (ev) {
+        if (ev.target === popup) closePopup();
+      });
+
+      popup.querySelector("#vep-form").addEventListener("submit", function (ev) {
+        ev.preventDefault();
+        var wa = popup.querySelector("#vep-whatsapp").value.trim();
+        if (!wa || wa.length < 7) return;
+
+        // Persist para usar no recovery
+        try {
+          state.userData.whatsapp = wa;
+          localStorage.setItem("vx_exit_recovery", JSON.stringify({
+            whatsapp: wa,
+            name: userName,
+            timestamp: Date.now(),
+            plan: state.selectedPlan
+          }));
+        } catch (e) {}
+
+        if (window.vortxTrack) {
+          vortxTrack("exit_intent_captured", {
+            has_whatsapp: true,
+            plan: state.selectedPlan
+          });
+        }
+
+        // Mostrar confirmação dentro do próprio popup
+        popup.querySelector(".vep-card").innerHTML = `
+          <div class="vep-success">
+            <div class="vep-success-icon">✓</div>
+            <div class="vep-success-title">¡Diagnóstico guardado!</div>
+            <p>Te mando el resumen en un momento. El precio de $17 sigue disponible por 24 horas.</p>
+            <button class="vep-btn vep-btn-back" id="vep-stay">Seguir aquí y ver la oferta</button>
+          </div>
+        `;
+        popup.querySelector("#vep-stay").addEventListener("click", closePopup);
+      });
+    }
+
+    function escapeHtml(s) {
+      return String(s).replace(/[&<>"']/g, function (c) {
+        return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c];
+      });
+    }
 
     // ── CHECKOUT TRANSITION SCREEN ────────────────────────────
     // Tela de preparação mental antes do redirect para Hotmart

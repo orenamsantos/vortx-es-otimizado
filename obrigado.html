@@ -28,6 +28,10 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .confirm h1{font-family:var(--ff-d);font-weight:700;font-size:clamp(1.5rem,5vw,2rem);line-height:1.25;margin-bottom:8px}
 .confirm p{font-size:.95rem;color:var(--txt2);max-width:400px;margin:0 auto}
 .steps{padding:28px 0;display:flex;flex-direction:column;gap:10px}
+.vortx-active-bar{display:flex;align-items:center;gap:10px;padding:14px 18px;margin:8px 0 20px;background:rgba(76,175,106,.08);border:1px solid rgba(76,175,106,.25);border-radius:var(--r-md);font-size:.88rem;color:var(--txt);line-height:1.4}
+.vortx-active-bar strong{color:var(--green);font-weight:700}
+.vortx-active-dot{width:10px;height:10px;border-radius:50%;background:var(--green);box-shadow:0 0 0 0 rgba(76,175,106,.6);animation:vortxPulse 2s infinite;flex-shrink:0}
+@keyframes vortxPulse{0%{box-shadow:0 0 0 0 rgba(76,175,106,.6)}70%{box-shadow:0 0 0 8px rgba(76,175,106,0)}100%{box-shadow:0 0 0 0 rgba(76,175,106,0)}}
 .step{display:flex;align-items:center;gap:16px;padding:16px 20px;background:var(--card);border:1px solid var(--brd);border-radius:var(--r-card)}
 .step-n{font-family:var(--ff-m);font-size:.8rem;font-weight:700;color:var(--gold);width:36px;height:36px;display:flex;align-items:center;justify-content:center;background:var(--gold-sub);border-radius:var(--r-sm);flex-shrink:0}
 .step-t{font-weight:600;font-size:.9rem}.step-d{font-size:.78rem;color:var(--txt3);margin-top:2px}
@@ -115,18 +119,21 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     <div class="step fade-up d3"><div class="step-n">03</div><div><div class="step-t">Sigue exactamente como está escrito</div><div class="step-d">Va a parecer demasiado simple — no cambies nada. La dosis y la secuencia son donde está el resultado.</div></div></div>
     <div class="step fade-up d4"><div class="step-n">04</div><div><div class="step-t">No le cuentes a nadie, deja que el resultado hable</div><div class="step-d">En 2-3 semanas tu pareja va a notarlo, tu cuerpo lo va a mostrar y tú no vas a necesitar decir nada.</div></div></div>
   </div>
-  <div class="divider fade-up d5" id="upsell-section" style="opacity:0;transition:opacity 0.8s ease;">⚠ Espera — lee esto antes de salir</div>
+  <div class="vortx-active-bar fade-up d5" id="upsell-section" style="opacity:0;transition:opacity 0.8s ease;">
+    <span class="vortx-active-dot"></span>
+    <span><strong>Tu Protocolo VORTX está activo.</strong> Antes de cerrar esta página…</span>
+  </div>
   <div class="upsell">
     <div class="upsell-alert fade-up d5">
-      <p>El protocolo funciona, pero <strong>ya está funcionando — pero hay hombres que quieren resultados esta misma noche</strong>  <em></em></p>
+      <p>Hay <strong>UNA cosa</strong> que separa a los hombres que ven resultados en <em>7 días</em> de los que esperan 21. Y <strong>solo puedo ofrecértela ahora</strong> — una sola vez.</p>
     </div>
     <div class="upsell-timer fade-up d5">
       <div class="upsell-timer-badge">⏱ Oferta expira en <span id="upsell-timer">05:00</span></div>
     </div>
     <div class="upsell-head fade-up d6">
-      <div class="tag">🔬 OFERTA ÚNICA — SOLO EN ESTA PÁGINA</div>
-      <h2>Suero Vasodilatador de <em>120 Minutos</em></h2>
-      <p class="sub">Receta casera con 4 ingredientes de supermercado que en 2 horas te deja más grueso, más duro y con mayor duración — sin pastilla, sin receta, sin riesgo.</p>
+      <div class="tag">⚡ ACELERADOR DEL PROTOCOLO VORTX</div>
+      <h2>Acorta tu resultado de <em>21 días a 7 días</em></h2>
+      <p class="sub">El Suero Vasodilatador de 120 Minutos actúa en las 2 primeras horas del día — cuando el Protocolo VORTX todavía no está activo. No es un producto nuevo. Es el complemento que multiplica lo que acabas de comprar.</p>
     </div>
     <div class="ingredients fade-up d6">
       <div class="ingredients-title">Lo que abre los vasos</div>
@@ -139,11 +146,11 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <p class="ingredients-locked">A <span>dosis exacta, la secuencia y el timing</span> hacen toda la diferencia.</p>
     </div>
     <div class="how fade-up d7">
-      <div class="how-title">Cómo funciona</div>
+      <div class="how-title">Por qué acorta el tiempo de resultado</div>
       <div class="how-steps">
-        <div class="how-step"><div class="how-step-time">18h</div><div class="how-step-text"><strong>Preparas el suero vasodilatador</strong> en 3 minutos con ingredientes del supermercado más cercano.</div></div>
-        <div class="how-step"><div class="how-step-time">19h</div><div class="how-step-text"><strong>Lo tomas de una vez</strong> y el óxido nítrico se dispara — los vasos del pene empiezan a dilatarse y sientes la sangre bajar con presión.</div></div>
-        <div class="how-step"><div class="how-step-time">20h</div><div class="how-step-text"><strong>Vasos abiertos, sangre fluyendo con presión máxima</strong>: tamaño máximo, firmeza total, duración que no sentías hace años. <strong>Listo para usarlo.</strong></div></div>
+        <div class="how-step"><div class="how-step-time">VORTX</div><div class="how-step-text"><strong>Funciona por acumulación</strong> — las rutinas del protocolo construyen el flujo vascular día a día. Resultados visibles a partir del día 14-21.</div></div>
+        <div class="how-step"><div class="how-step-time">SUERO</div><div class="how-step-text"><strong>Funciona por activación inmediata</strong> — el óxido nítrico se dispara en 2 horas. Los vasos se abren ANTES del protocolo terminar su trabajo.</div></div>
+        <div class="how-step"><div class="how-step-time">STACK</div><div class="how-step-text"><strong>Los dos juntos</strong>: activación rápida los primeros días + construcción sólida por el protocolo. Resultado visible en 7 días en lugar de 21. <strong>47% más flujo en la primera semana.</strong></div></div>
       </div>
     </div>
     <div class="testi fade-up d7">
@@ -155,9 +162,9 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <span class="testi-badge">Tamaño y firmeza en 2 horas, sin pastilla</span>
     </div>
     <div class="price-block fade-up d8">
-      <div class="price-compare"><span class="price-old">$ 37</span><span class="price-arrow">→</span><div class="price-new"><small>$</small> 9</div></div>
-      <div class="price-saving">Acelera tu resultado — solo hoy</div>
-      <div class="price-sub">Pago único • Acceso inmediato</div>
+      <div class="price-compare"><span class="price-old">$ 29</span><span class="price-arrow">→</span><div class="price-new"><small>$</small> 9</div></div>
+      <div class="price-saving">Precio de costo — solo porque ya tienes VORTX</div>
+      <div class="price-sub">Pago único • Se añade a tu pedido actual • Acceso inmediato</div>
     </div>
     <div class="guarantee fade-up d8">
       <div class="guarantee-icon">🛡️</div>
@@ -165,9 +172,9 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <p class="guarantee-text">Haz el suero, espera 2 horas y si el tamaño no aumenta visiblemente y la firmeza no vuelve con fuerza, pide reembolso. Sin preguntas, sin rodeos.</p>
     </div>
     <div class="fade-up d9">
-      <a href="#" class="btn" id="btn-upsell">SÍ, QUIERO RESULTADO ESTA NOCHE<span class="btn-price">$ 9</span></a>
-      <p class="btn-sub">Acceso inmediato junto con VORTX • Garantía total</p>
-      <button class="btn-skip" id="btn-skip">No, prefiero esperar más tiempo →</button>
+      <a href="#" class="btn" id="btn-upsell">SÍ, ACELERAR MI PROTOCOLO A 7 DÍAS<span class="btn-price">$ 9</span></a>
+      <p class="btn-sub">Se suma a tu pedido VORTX • Acceso inmediato • Garantía total</p>
+      <button class="btn-skip" id="btn-skip">No gracias, prefiero esperar 21 días →</button>
     </div>
   </div>
   <div class="footer"><div class="footer-logo">VORTX<span></span></div><p>Protocolo de Reversión Vascular Masculina</p></div>
