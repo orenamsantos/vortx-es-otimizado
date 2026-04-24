@@ -1,32 +1,60 @@
 const BRAND={name:"VORTX",tagline:"Recuperación de la Masculinidad",year:(new Date).getFullYear()},
 
 GATE_DATA={
-  headline:"Un médico de Washington descubrió por qué el pene encoge después de los 35 — y el método casero que revierte esto en 60 días",
-  subheadline:"No es la edad. No es la genética. Es un bloqueo vascular silencioso que ya afecta al 73% de los hombres mayores de 35 — y que se puede revertir en casa.",
-  cta:"QUIERO SABER POR QUÉ ESTÁ PASANDO ESTO",
-  timerStrip:"El test dura 3 minutos. Lo que vas a descubrir te va a incomodar — y aliviar al mismo tiempo.",
+  headline:"Tu cuerpo ya no responde como antes de los 35 — y no es la edad.",
+  subheadline:"Un médico de Washington descubrió la causa real y el método casero que la revierte en 60 días. Haz el test de 2 minutos y descubre tu nivel exacto.",
+  cta:"EMPEZAR EL DIAGNÓSTICO",
+  timerStrip:"Test anónimo de 2 minutos. El resultado te va a sorprender.",
   socialProof:"17.483 hombres ya revertieron. Resultado promedio: 18 días.",
   privacySeal:"100% confidencial • Anónimo • Nadie lo sabrá",
   badge:"Método validado por 17.483 hombres en 14 países"
 },
 
 PHASES=[
-  {id:1,label:"PERFIL",steps:[1,2,3]},
-  {id:2,label:"SÍNTOMAS",steps:[4,5,6,7]},
-  {id:3,label:"HÁBITOS",steps:[8]},
-  {id:4,label:"VEREDICTO",steps:[9,10]}
+  {id:1,label:"VALIDACIÓN",steps:[1,2]},
+  {id:2,label:"PERFIL",steps:[3,4]},
+  {id:3,label:"SÍNTOMAS",steps:[5,6,7,8,9]},
+  {id:4,label:"HÁBITOS",steps:[10]},
+  {id:5,label:"VEREDICTO",steps:[11,12]}
 ],
 
 STEPS=[
   {
-    id:1,phase:1,type:"text-input",
+    id:1,phase:1,type:"single-select",
+    question:"Vamos a ser honestos por 10 segundos.",
+    microcopy:"¿Notas que tu cuerpo ya no responde como antes de los 35?",
+    options:[
+      {value:"si_molesta",label:"Sí, y me molesta más de lo que admito",icon:"💭"},
+      {value:"si_activo",label:"Sí, y por eso estoy aquí",icon:"🎯"},
+      {value:"si_empezando",label:"Sí, está empezando y quiero actuar antes",icon:"⚡"}
+    ],
+    weight:0
+  },
+  {
+    id:2,phase:1,type:"single-select",
+    question:"El 73% de los hombres mayores de 35 tiene esto — y los médicos no lo detectan.",
+    microcopy:"El problema no es hormonal. Es 3 veces más común de lo que dicen. ¿Lo sabías?",
+    options:[
+      {value:"no_sabia",label:"No, nunca lo había escuchado",icon:"🧐"},
+      {value:"sospechaba",label:"Sospechaba algo así",icon:"🔍"},
+      {value:"quiero_saber",label:"Quiero saber qué es exactamente",icon:"🔓"}
+    ],
+    triggers:{
+      "no_sabia":"🛑 Eso es exactamente lo que las farmacéuticas no quieren que sepas. Sigue — vas a entender.",
+      "sospechaba":"⚡ Tu intuición está correcta. El test va a confirmar exactamente qué está pasando en tu cuerpo.",
+      "quiero_saber":"🔥 Bien. Responde las próximas preguntas con honestidad — el diagnóstico depende de eso."
+    },
+    weight:0
+  },
+  {
+    id:3,phase:2,type:"text-input",
     question:"¿Cómo debo llamarte?",
     microcopy:"Necesito tu nombre para que el diagnóstico tenga sentido para ti.",
     field:{name:"userName",placeholder:"Tu primer nombre...",maxLength:30},
     weight:0
   },
   {
-    id:2,phase:1,type:"single-select",
+    id:4,phase:2,type:"single-select",
     question:"{name}, ¿cuántos años tienes?",
     microcopy:"La velocidad del daño cambia brutalmente de una franja a otra.",
     options:[
@@ -48,7 +76,7 @@ STEPS=[
     weight:0
   },
   {
-    id:3,phase:1,type:"single-select",
+    id:5,phase:3,type:"single-select",
     question:"{name}, ¿qué es lo que más te corroe?",
     microcopy:"Nadie lo va a ver. Solo tú y yo.",
     options:[
@@ -60,7 +88,7 @@ STEPS=[
     weight:0
   },
   {
-    id:4,phase:2,type:"single-select",
+    id:6,phase:3,type:"single-select",
     question:"¿Cuándo fue la última vez que amaneciste con erección sin necesitar nada?",
     microcopy:"Erección matinal fuerte = sangre llegando con presión. Si paró, el problema ya está avanzado.",
     options:[
@@ -75,7 +103,7 @@ STEPS=[
     weight:20,category:"libido"
   },
   {
-    id:5,phase:2,type:"single-select",
+    id:7,phase:3,type:"single-select",
     question:"En el momento de la verdad, ¿cómo te va?",
     microcopy:"Sin excusas. ¿Qué pasa cuando tienes que rendir?",
     options:[
@@ -90,7 +118,7 @@ STEPS=[
     weight:15,category:"libido"
   },
   {
-    id:6,phase:2,type:"multi-select",
+    id:8,phase:3,type:"multi-select",
     question:"Mírate ahora, {name}. ¿Qué ves?",
     microcopy:"Cada kilo de barriga fabrica hormona femenina y le roba sangre al pene.",
     minSelections:1,
@@ -107,7 +135,7 @@ STEPS=[
     weight:10,category:"cuerpo",scoreLogic:"count-negative"
   },
   {
-    id:7,phase:2,type:"single-select",
+    id:9,phase:3,type:"single-select",
     question:"¿Ya necesitaste la pastilla azul para funcionar?",
     microcopy:"Cada vez que la usas, tu cuerpo aprende a no funcionar solo.",
     options:[
@@ -122,7 +150,7 @@ STEPS=[
     weight:10,category:"fisica"
   },
   {
-    id:8,phase:3,type:"multi-select",
+    id:10,phase:4,type:"multi-select",
     question:"{name}, ¿cuáles de estos hábitos tienes?",
     microcopy:"Cada uno de estos cierra los vasos que alimentan el pene por dentro.",
     minSelections:1,
@@ -139,7 +167,7 @@ STEPS=[
     weight:8,category:"habitos",scoreLogic:"count-negative"
   },
   {
-    id:9,phase:4,type:"whatsapp-input",
+    id:11,phase:5,type:"whatsapp-input",
     question:"Ya casi, {name}. ¿A dónde te envío tu resultado?",
     microcopy:"Tu diagnóstico es personal. Te lo mando directo a tu celular.",
     field:{name:"whatsapp",placeholder:"+52 000 000 0000"},
@@ -148,7 +176,7 @@ STEPS=[
     weight:0
   },
   {
-    id:10,phase:4,type:"single-select",
+    id:12,phase:5,type:"single-select",
     question:"Última pregunta, {name}. ¿Por quién estás haciendo esto?",
     microcopy:"Eso cambia el enfoque de tu protocolo.",
     options:[

@@ -34,7 +34,7 @@
   // ── INTERSTITIALS ─────────────────────────────────────────
   const INTERSTITIALS = [
     {
-      afterStep: 4,
+      afterStep: 6,  // após erección matinal
       emoji: "🔬",
       headline: '{name}, esto tiene nombre: <span class="highlight">bloqueo vascular peniano.</span>',
       getText: () => "No es la edad. Es obstrucción en los vasos que llevan sangre al pene. Ahora vamos a mapear el daño.",
@@ -42,47 +42,102 @@
       cta: "MAPEAR EL DAÑO",
     },
     {
-      afterStep: 11,
+      afterStep: 9,  // após pastilla
       emoji: "🧠",
-      headline: 'O mapa vascular de <span class="highlight">{name}</span> não é bonito.',
+      headline: 'El mapa vascular de <span class="highlight">{name}</span> no es alentador.',
       getText: () => {
-        const manha = state.answers[9];
-        const sono  = state.answers[10];
-        const nome  = state.userData.name || "tú";
-
-        if (manha === "zumbi") {
-          return `${nome}, seu corpo não se recupera à noite. Cortisol come sua testosterona viva. Cada noite assim é mais dano.`;
+        const pastilla = state.answers[9];
+        const nome     = state.userData.name || "tú";
+        if (pastilla === "viciado") {
+          return `${nome}, tu cuerpo creó dependencia química. Sin la pastilla, nada funciona. Pero se puede reactivar sin química.`;
         }
-        if (manha === "odio") {
-          return `${nome}, eso no es excusa. Es testosterona por el suelo. Cuando la sangre no circula, el pene es lo primero en sufrir.`;
+        if (pastilla === "asvezes") {
+          return `${nome}, tenerla "por si acaso" ya es señal. En 2 años, sin ella, nada va a responder.`;
         }
-        if (sono === "pessimo") {
-          return `${nome}, sem sono profundo não tem testosterona. Sem testosterona não tem tamanho, firmeza ou duração.`;
-        }
-        if (sono === "superficial") {
-          return `${nome}, dormir sem descansar é carregar o celular com o fio solto. De manhã a bateria tá em 12%.`;
-        }
-        return "Tus vasos se están cerrando. Ahora cruzamos con tus hábitos para descubrir qué está acelerando eso.";
+        return `${nome}, tus vasos se están cerrando. Ahora cruzamos con tus hábitos para descubrir qué está acelerando eso.`;
       },
-      stat: "93% dos homens com esse perfil respondem ao protocolo em menos de 21 dias.",
-      cta: "VER MEUS HÁBITOS",
+      stat: "93% de los hombres con este perfil responden al protocolo en menos de 21 días.",
+      cta: "VER MIS HÁBITOS",
     },
     {
-      afterStep: 14,
+      afterStep: 10,  // após hábitos — prepara resultado
       emoji: "🔴",
-      headline: 'Você vai ver um número agora. <span class="highlight">Ele revela o quanto seus vasos já fecharam.</span>',
+      headline: 'Vas a ver un número ahora. <span class="highlight">Revela cuánto se han cerrado tus vasos.</span>',
       getText: () => {
         const nome = state.userData.name || "tú";
         return `${nome}, el sistema cruzó tus respuestas con 17.483 diagnósticos. Algunos hombres quedan en shock, otros sienten alivio. Prepárate.`;
       },
-      stat: "A maioria dos homens nunca soube que esse número existia.",
-      cta: "VER MEU DIAGNÓSTICO",
+      stat: "La mayoría de los hombres nunca supo que este número existía.",
+      cta: "VER MI DIAGNÓSTICO",
     },
   ];
+
+
+  // ── PROGRESS PERSISTENCE — recovery after abandonment ────────
+  const STORAGE_KEY = "vx_quiz_progress_v1";
+  const STORAGE_TTL_MS = 24 * 60 * 60 * 1000; // 24h
+  function saveProgress() {
+    try {
+      const data = {
+        t: Date.now(),
+        currentStepId: state.currentStepId,
+        userData: state.userData,
+        answers: state.answers,
+        selectedPlan: state.selectedPlan,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    } catch (e) {}
+  }
+  function tryResumeProgress() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const data = JSON.parse(raw);
+      if (!data || !data.t) return;
+      if (Date.now() - data.t > STORAGE_TTL_MS) {
+        localStorage.removeItem(STORAGE_KEY);
+        return;
+      }
+      // Só restaura se tiver ao menos o nome + 1 resposta (step 3 em diante)
+      if (!data.userData || !data.userData.name) return;
+      if (!data.answers || Object.keys(data.answers).length < 1) return;
+
+      const resumeDiv = document.createElement("div");
+      resumeDiv.className = "resume-banner";
+      resumeDiv.innerHTML = `
+        <p>Continuemos donde dejaste, ${data.userData.name}. Estás en el paso ${data.currentStepId || 3} de ${STEPS.length}.</p>
+        <div class="resume-actions">
+          <button class="btn-resume-yes">CONTINUAR</button>
+          <button class="btn-resume-no">EMPEZAR DE NUEVO</button>
+        </div>
+      `;
+      document.body.appendChild(resumeDiv);
+
+      resumeDiv.querySelector(".btn-resume-yes").onclick = () => {
+        state.userData = data.userData;
+        state.answers = data.answers || {};
+        state.selectedPlan = data.selectedPlan || state.selectedPlan;
+        state.currentStepId = data.currentStepId || 3;
+        resumeDiv.remove();
+        document.getElementById("gate").classList.remove("active");
+        document.getElementById("progress-bar").style.display = "block";
+        showStep();
+      };
+      resumeDiv.querySelector(".btn-resume-no").onclick = () => {
+        localStorage.removeItem(STORAGE_KEY);
+        resumeDiv.remove();
+      };
+    } catch (e) {}
+  }
+  function clearProgress() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+  }
 
   // ── INIT ──────────────────────────────────────────────────
   function init() {
     buildStepOrder();
+    // Resume progress from localStorage (recover abandoners)
+    tryResumeProgress();
     renderGate();
     initProgressBar();
     bindGlobalEvents();
@@ -132,6 +187,15 @@
     });
     phasesContainer.innerHTML = phasesHtml;
     labelsContainer.innerHTML = labelsHtml;
+
+    // Criar elemento de step counter ("Paso X de Y — X%") se ainda não existir
+    if (!document.getElementById("progress-step-counter")) {
+      const counter = document.createElement("div");
+      counter.id = "progress-step-counter";
+      counter.className = "progress-step-counter";
+      counter.innerHTML = '<span class="progress-step-num"></span><span class="progress-step-pct"></span>';
+      labelsContainer.parentNode.insertBefore(counter, labelsContainer);
+    }
   }
 
   function updateProgressBar() {
@@ -157,6 +221,36 @@
         fill.style.width = "0%";
       }
     });
+
+    // Atualizar o counter numérico
+    const counterNum = document.querySelector(".progress-step-num");
+    const counterPct = document.querySelector(".progress-step-pct");
+    if (counterNum && counterPct) {
+      const totalSteps = stepOrder.length;
+      const currentIdx = stepOrder.findIndex((s) => s.id === step.id) + 1;
+      const pct        = Math.round((currentIdx / totalSteps) * 100);
+      counterNum.textContent = `Paso ${currentIdx} de ${totalSteps}`;
+      counterPct.textContent = `${pct}%`;
+    }
+  }
+
+
+  // ── SOCIAL COUNTER ANIMATION ──────────────────────────────
+  function animateSocialCounter() {
+    const el = document.getElementById("social-counter");
+    if (!el) return;
+    const target = 17483;
+    const duration = 1800;
+    const start = performance.now();
+    function tick(now) {
+      const elapsed = now - start;
+      const pct = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - pct, 3);
+      const val = Math.floor(eased * target);
+      el.textContent = val.toLocaleString("es");
+      if (pct < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
   }
 
   // ── SCREEN MANAGEMENT ─────────────────────────────────────
@@ -1075,7 +1169,7 @@
   function showProtocol() {
     showScreen("protocol");
     const name     = state.userData.name || "tú";
-    const painArea = state.answers[10];
+    const painArea = state.answers[12];
 
     const headlineMap = {
       parceira: "El Protocolo Para Que Tu Pareja No Quiera Que Pares",
@@ -1136,7 +1230,7 @@
     showScreen("pricing");
     if (window.vortxTrack) vortxTrack("view_pricing", { score: state.score });
 
-    const painArea  = state.answers[10];
+    const painArea  = state.answers[12];
     const name      = state.userData.name || "";
     const buildCheckoutCta = (planId) => {
       const plan = PRICING_DATA.plans.find((p) => p.id === planId);
@@ -1190,21 +1284,112 @@
         <div class="pricing-timer-sub">Después de esto el precio vuelve a $197</div>
       </div>
 
-      <div class="pricing-anchor-block">
-        <p class="pricing-anchor-text">Cada mes sin actuar pierdes más tamaño, más firmeza, más duración. En 12 meses el daño se vuelve irreversible — y el costo de no actuar es perder lo que te hace hombre.</p>
-        <p class="pricing-anchor-sub">El acceso completo cuesta menos que una cena — y puede cambiar los próximos 20 años de tu vida.</p>
+      <div class="pricing-social-counter">
+        <div class="pricing-social-num" id="social-counter">17.483</div>
+        <div class="pricing-social-txt">hombres ya empezaron el protocolo</div>
+        <div class="pricing-social-live"><span class="pulse-dot"></span> 34 personas viendo esta página ahora mismo</div>
       </div>
 
-      <div class="pricing-plans">${plansHtml}</div>
+      <div class="pricing-anchor-block">
+        <p class="pricing-anchor-text">Cada mes sin actuar pierdes más tamaño, más firmeza, más duración. En 12 meses el daño se vuelve irreversible — y el costo de no actuar es perder lo que te hace hombre.</p>
+      </div>
+
+      <!-- HORMOZI VALUE STACK -->
+      <div class="value-stack">
+        <div class="value-stack-header">LO QUE RECIBES HOY:</div>
+        <div class="value-stack-item">
+          <div class="vsi-check">✓</div>
+          <div class="vsi-content">
+            <div class="vsi-title">Diagnóstico Vascular Personalizado</div>
+            <div class="vsi-desc">Tu mapa exato de bloqueo basado en las respuestas del test</div>
+          </div>
+          <div class="vsi-price">$47</div>
+        </div>
+        <div class="value-stack-item">
+          <div class="vsi-check">✓</div>
+          <div class="vsi-content">
+            <div class="vsi-title">Protocolo Vascular de 21 Días</div>
+            <div class="vsi-desc">Las 4 rutinas casi ninguna toma más de 4 minutos al día</div>
+          </div>
+          <div class="vsi-price">$97</div>
+        </div>
+        <div class="value-stack-item">
+          <div class="vsi-check">✓</div>
+          <div class="vsi-content">
+            <div class="vsi-title">Plan Alimentar Anti-Estrógeno</div>
+            <div class="vsi-desc">Los 12 alimentos que disparan testosterona + los 10 que la destruyen</div>
+          </div>
+          <div class="vsi-price">$39</div>
+        </div>
+        <div class="value-stack-item">
+          <div class="vsi-check">✓</div>
+          <div class="vsi-content">
+            <div class="vsi-title">Stack Hormonal Nocturno</div>
+            <div class="vsi-desc">3 compuestos baratos que triplican tu testosterona mientras duermes</div>
+          </div>
+          <div class="vsi-price">$29</div>
+        </div>
+        <div class="value-stack-item value-stack-bonus">
+          <div class="vsi-check">🎁</div>
+          <div class="vsi-content">
+            <div class="vsi-title">BONO: Acceso de por vida</div>
+            <div class="vsi-desc">Todas las actualizaciones futuras incluidas — sin costo extra</div>
+          </div>
+          <div class="vsi-price">$47</div>
+        </div>
+
+        <div class="value-stack-total">
+          <div class="vst-label">VALOR TOTAL:</div>
+          <div class="vst-old">$259</div>
+        </div>
+        <div class="value-stack-today">
+          <div class="vsth-label">HOY, SOLO HOY:</div>
+          <div class="vsth-price"><span>$</span>17</div>
+          <div class="vsth-tag">94% de descuento porque entraste por el diagnóstico gratuito</div>
+        </div>
+      </div>
+
+      <div class="pricing-plans" style="display:none;">${plansHtml}</div>
+
+      <div class="effort-box">
+        <div class="effort-icon">⏱️</div>
+        <div class="effort-content">
+          <div class="effort-title">4 minutos al día. Sin pastillas. Sin receta.</div>
+          <div class="effort-desc">Sin gimnasio, sin dietas extremas, sin productos químicos. Solo rutinas simples que cualquier hombre puede hacer en casa.</div>
+        </div>
+      </div>
 
       <div class="pricing-urgency-bio-block">
         <p class="pricing-urgency-bio-text">Esta noche vas a acostarte. Vas a mirar el techo y vas a saber que podrías haber hecho algo diferente. Mañana vas a despertar igual o peor. El bloqueo vascular no espera, no para, no negocia. <strong>La única pregunta es: ¿vas a actuar mientras todavía hay tiempo?</strong></p>
       </div>
 
-      <div class="guarantee-box guarantee-box--pre-cta">
-        <div class="guarantee-icon">${PRICING_DATA.guarantee.icon}</div>
-        <div class="guarantee-title">${PRICING_DATA.guarantee.title}</div>
-        <p class="guarantee-text">${PRICING_DATA.guarantee.text}</p>
+      <!-- HORMOZI DOUBLE-YOUR-MONEY GUARANTEE -->
+      <div class="guarantee-box guarantee-box--doubled">
+        <div class="guarantee-shield">🛡️</div>
+        <div class="guarantee-badge">GARANTÍA DEL DOBLE</div>
+        <div class="guarantee-title-big">Resultado visible en 30 días — o te devuelvo el DOBLE.</div>
+        <p class="guarantee-text-big">Si en 30 días tu pareja no nota el cambio sin que tengas que decirle nada, te devuelvo los $17 + otros $17 por mi error. <strong>Total: $34.</strong> El riesgo es 100% mío. Tú solo necesitas seguir el protocolo.</p>
+        <div class="guarantee-small">Sin preguntas. Sin burocracia. Sin letra pequeña.</div>
+      </div>
+
+      <!-- WHATSAPP-STYLE TESTIMONIAL PLACEHOLDERS (you'll add real images here) -->
+      <div class="whatsapp-testimonials" id="wa-testimonials">
+        <div class="wa-test-header">📱 Mensajes reales de clientes</div>
+        <div class="wa-test-grid">
+          <div class="wa-placeholder" data-slot="1">
+            <!-- Insert WhatsApp screenshot #1 here (upload to /img/wa1.jpg) -->
+            <img src="img/wa1.jpg" alt="Mensaje de cliente" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="wa-placeholder" data-slot="2">
+            <img src="img/wa2.jpg" alt="Mensaje de cliente" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="wa-placeholder" data-slot="3">
+            <img src="img/wa3.jpg" alt="Mensaje de cliente" loading="lazy" onerror="this.style.display='none'">
+          </div>
+          <div class="wa-placeholder" data-slot="4">
+            <img src="img/wa4.jpg" alt="Mensaje de cliente" loading="lazy" onerror="this.style.display='none'">
+          </div>
+        </div>
       </div>
 
       <div class="testimonial-pre-cta">
@@ -1215,12 +1400,36 @@
 
       <div class="checkout-cta-block">
         <button class="btn-cta btn-cta--checkout" id="btn-checkout">${buildCheckoutCta(state.selectedPlan)}</button>
-        <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía de 30 días</p>
+        <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía del DOBLE — 30 días</p>
         <div class="payment-methods">
           ${PRICING_DATA.paymentMethods.map((m) => `<span class="payment-method">${m}</span>`).join("")}
         </div>
       </div>
+
+      <div class="final-reassurance">
+        <div class="fr-item">🔒 Pago 100% seguro</div>
+        <div class="fr-item">✉️ Acceso inmediato por email</div>
+        <div class="fr-item">🛡️ Garantía del doble — 30 días</div>
+      </div>
     `;
+
+    // Animated social counter
+    animateSocialCounter();
+
+
+    // WhatsApp testimonial lightbox (tap to enlarge)
+    document.querySelectorAll(".wa-placeholder img").forEach(function(img) {
+      img.addEventListener("click", function(ev) {
+        if (img.style.display === "none") return;
+        ev.preventDefault();
+        var overlay = document.createElement("div");
+        overlay.className = "wa-lightbox";
+        overlay.innerHTML = '<button class="wa-lightbox-close" aria-label="Cerrar">✕</button><img src="' + img.src + '" alt="">';
+        document.body.appendChild(overlay);
+        var close = function() { overlay.remove(); };
+        overlay.addEventListener("click", close);
+      });
+    });
 
     rebindPlanSelection(buildCheckoutCta);
 
@@ -1281,6 +1490,7 @@
       // dependendo se o script do Facebook já estava carregado.
       // Trade-off aceitável: 900ms vs evento perdido.
       setTimeout(function () {
+        try { clearProgress(); } catch(e){}
         window.location.href = checkoutUrl;
       }, 900);
     });
