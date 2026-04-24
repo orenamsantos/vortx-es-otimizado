@@ -19,6 +19,15 @@
       ]
     },
     {
+      "source": "/(obrigado|cross-sell|downsell|acesso|aguardando).html",
+      "headers": [
+        { "key": "X-Robots-Tag", "value": "noindex, nofollow, noarchive" },
+        { "key": "Cache-Control", "value": "private, no-store, no-cache, must-revalidate" },
+        { "key": "Referrer-Policy", "value": "origin" },
+        { "key": "X-Frame-Options", "value": "DENY" }
+      ]
+    },
+    {
       "source": "/(.*).html",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }

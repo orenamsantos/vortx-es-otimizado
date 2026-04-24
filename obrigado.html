@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+(function(){
+  // VORTX Access Guard v1 — bloqueia acesso direto às thank-you pages
+  // Aceita: ?hottok=XXX | ?transaction=HPXXX | ?src=vortx_funnel | referer hotmart
+  try {
+    var params   = new URLSearchParams(window.location.search);
+    var hottok   = params.get('hottok')      || '';
+    var trans    = params.get('transaction') || '';
+    var src      = params.get('src')         || '';
+    var referer  = document.referrer         || '';
+
+    // Validações aceitas (em ordem de prioridade)
+    var validTok   = hottok.length >= 8;                                      // Token Hotmart
+    var validTrans = /^HP[A-Z0-9]{6,}/i.test(trans);                          // Transaction Hotmart
+    var validSrc   = src === 'vortx_funnel';                                  // Navegação interna (upsell→crosssell→downsell→acesso)
+    var fromHot    = /pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(referer);
+    var fromSelf   = referer.indexOf(location.origin) === 0;                  // Navegação dentro do próprio site
+
+    if (!validTok && !validTrans && !validSrc && !fromHot && !fromSelf) {
+      // Acesso direto não autorizado — redireciona para home
+      window.location.replace('/');
+    }
+  } catch (e) {
+    window.location.replace('/');
+  }
+})();
+</script>
 <!-- Meta Pixel: inicializado pelo tracking.js — NÃO duplicar aqui -->
 <!-- Purchase: enviado APENAS pela Hotmart CAPI (server-side). -->
 <!-- Aqui disparamos purchase_confirmed (evento custom) para não duplicar. -->
@@ -189,19 +216,23 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   var purchaseValue = Number(p.get('value')) || 17;
   var purchasePlan = p.get('plan') || 'vitalicio';
   var purchaseProduct = purchasePlan === 'mensal' ? 'vortx_mensal' : 'vortx_protocol';
-  if(window.vortxTrack) vortxTrack('purchase_confirmed',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
-  // Track upsell view
-  if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:9});
+  // Só dispara eventos de conversão se a página foi acessada via fluxo legítimo
+  // (previne envenenamento do pixel por acesso direto ou crawlers)
+  var isLegit = window.vortxIsLegitimateConversionPage ? window.vortxIsLegitimateConversionPage() : true;
+  if (isLegit) {
+    if(window.vortxTrack) vortxTrack('purchase_confirmed',{value:purchaseValue,currency:'USD',product:purchaseProduct,plan:purchasePlan});
+    if(window.vortxTrack) vortxTrack('upsell_view',{product:'soro_120',value:9});
+  }
 
   document.getElementById('btn-upsell').addEventListener('click',function(e){
     e.preventDefault();
     // TODO: processar pagamento do Soro, depois redirecionar
     if(window.vortxTrack) vortxTrack('upsell_accept',{value:9,currency:'USD',product:'soro_120'});
-    window.location.href='cross-sell.html?soro=sim'+(n?'&name='+encodeURIComponent(n):'');
+    window.location.href='cross-sell.html?soro=sim&src=vortx_funnel'+(n?'&name='+encodeURIComponent(n):'');
   });
   document.getElementById('btn-skip').addEventListener('click',function(){
     if(window.vortxTrack) vortxTrack('upsell_decline',{product:'soro_120'});
-    window.location.href='downsell.html'+(n?'&name='+encodeURIComponent(n):'');
+    window.location.href='downsell.html?src=vortx_funnel'+(n?'&name='+encodeURIComponent(n):'');
   });
 })();
 </script>

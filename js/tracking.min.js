@@ -64,6 +64,28 @@
     return p;
   };
 
+
+  // ── Guard anti-acesso direto em páginas de conversão ────────
+  // Previne disparo de eventos 'purchase_confirmed' quando a página
+  // é acessada diretamente (sem vir da Hotmart ou navegação interna).
+  window.vortxIsLegitimateConversionPage = function() {
+    try {
+      var params = new URLSearchParams(window.location.search);
+      var hottok = params.get('hottok') || '';
+      var trans  = params.get('transaction') || '';
+      var src    = params.get('src') || '';
+      var ref    = document.referrer || '';
+
+      if (hottok.length >= 8) return true;
+      if (/^HP[A-Z0-9]{6,}/i.test(trans)) return true;
+      if (src === 'vortx_funnel') return true;
+      if (/pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(ref)) return true;
+      if (ref.indexOf(location.origin) === 0) return true;
+
+      return false;
+    } catch (e) { return false; }
+  };
+
   function generateEventId(eventName) {
     return eventName + "_" + Date.now() + "_" + Math.random().toString(36).substr(2, 9);
   }

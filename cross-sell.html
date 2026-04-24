@@ -1,6 +1,33 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+<script>
+(function(){
+  // VORTX Access Guard v1 — bloqueia acesso direto às thank-you pages
+  // Aceita: ?hottok=XXX | ?transaction=HPXXX | ?src=vortx_funnel | referer hotmart
+  try {
+    var params   = new URLSearchParams(window.location.search);
+    var hottok   = params.get('hottok')      || '';
+    var trans    = params.get('transaction') || '';
+    var src      = params.get('src')         || '';
+    var referer  = document.referrer         || '';
+
+    // Validações aceitas (em ordem de prioridade)
+    var validTok   = hottok.length >= 8;                                      // Token Hotmart
+    var validTrans = /^HP[A-Z0-9]{6,}/i.test(trans);                          // Transaction Hotmart
+    var validSrc   = src === 'vortx_funnel';                                  // Navegação interna (upsell→crosssell→downsell→acesso)
+    var fromHot    = /pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(referer);
+    var fromSelf   = referer.indexOf(location.origin) === 0;                  // Navegação dentro do próprio site
+
+    if (!validTok && !validTrans && !validSrc && !fromHot && !fromSelf) {
+      // Acesso direto não autorizado — redireciona para home
+      window.location.replace('/');
+    }
+  } catch (e) {
+    window.location.replace('/');
+  }
+})();
+</script>
 <!-- Meta Pixel: inicializado pelo tracking.js -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -212,18 +239,19 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
   }
 
   // Track cross-sell view
-  if(window.vortxTrack) vortxTrack('crosssell_view',{product:'protocolo_ignicion',value:14,soro_purchased:soro==='sim'});
+  var isLegit = window.vortxIsLegitimateConversionPage ? window.vortxIsLegitimateConversionPage() : true;
+  if (isLegit) { if(window.vortxTrack) vortxTrack('crosssell_view',{product:'protocolo_ignicion',value:14,soro_purchased:soro==='sim'}); }
 
   document.getElementById('btn-cross').addEventListener('click', function(e){
     e.preventDefault();
     // TODO: processar pagamento do Ignición, depois redirecionar
     if(window.vortxTrack) vortxTrack('crosssell_accept',{value:14,currency:'USD',product:'protocolo_ignicion'});
-    window.location.href = 'acesso.html' + (n ? '?name=' + encodeURIComponent(n) : '');
+    window.location.href = 'acesso.html?src=vortx_funnel' + (n ? '&name=' + encodeURIComponent(n) : '');
   });
 
   document.getElementById('btn-skip-final').addEventListener('click', function(){
     if(window.vortxTrack) vortxTrack('crosssell_decline',{product:'protocolo_ignicion'});
-    window.location.href = 'acesso.html' + (n ? '?name=' + encodeURIComponent(n) : '');
+    window.location.href = 'acesso.html?src=vortx_funnel' + (n ? '&name=' + encodeURIComponent(n) : '');
   });
 })();
 </script>
