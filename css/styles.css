@@ -2544,3 +2544,132 @@ a { color: var(--gold); text-decoration: none; }
   flex: 1;
   min-width: 0;
 }
+
+
+/* ══════════════════════════════════════════════════════════ */
+/*  CHECKOUT TRANSITION — "Preparando tu pago seguro"          */
+/*  Reduz estranhamento ao redirect para pay.hotmart.com       */
+/* ══════════════════════════════════════════════════════════ */
+.checkout-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  background: rgba(11, 11, 18, 0.96);
+  backdrop-filter: blur(10px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  animation: ctFadeIn 0.25s ease;
+}
+@keyframes ctFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.ct-card {
+  width: 100%;
+  max-width: 360px;
+  background: linear-gradient(180deg, var(--bg-secondary), var(--bg-primary));
+  border: 1px solid var(--gold);
+  border-radius: var(--radius-lg);
+  padding: 32px 24px 20px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.6), 0 0 0 1px rgba(201, 168, 76, 0.2) inset;
+}
+.ct-spinner {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 20px;
+}
+.ct-spinner-ring {
+  position: absolute;
+  inset: 0;
+  border: 3px solid rgba(201, 168, 76, 0.15);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: ctSpin 0.9s linear infinite;
+}
+@keyframes ctSpin {
+  to { transform: rotate(360deg); }
+}
+.ct-spinner-lock {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+}
+.ct-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.15rem;
+  color: var(--text-primary);
+  letter-spacing: -0.01em;
+  margin-bottom: 22px;
+}
+.ct-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 22px;
+  text-align: left;
+}
+.ct-step {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  opacity: 0.5;
+  transition: all 0.35s ease;
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+  background: rgba(255,255,255,0.02);
+}
+.ct-step .ct-check {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.05);
+  color: transparent;
+  font-size: 0.75rem;
+  font-weight: 700;
+  flex-shrink: 0;
+  transition: all 0.35s ease;
+}
+.ct-step.done {
+  opacity: 1;
+  color: var(--text-primary);
+  background: rgba(76, 175, 106, 0.08);
+}
+.ct-step.done .ct-check {
+  background: var(--status-good);
+  color: #fff;
+}
+.ct-footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-default);
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+.ct-footer strong {
+  color: var(--gold);
+  font-weight: 700;
+}
+.ct-badge-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
+}

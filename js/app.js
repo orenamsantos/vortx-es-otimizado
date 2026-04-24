@@ -1497,6 +1497,51 @@
 
     rebindPlanSelection(buildCheckoutCta);
 
+
+    // ── CHECKOUT TRANSITION SCREEN ────────────────────────────
+    // Tela de preparação mental antes do redirect para Hotmart
+    function showCheckoutTransition() {
+      var existing = document.getElementById("checkout-transition");
+      if (existing) return;
+
+      var overlay = document.createElement("div");
+      overlay.id = "checkout-transition";
+      overlay.className = "checkout-transition";
+      overlay.innerHTML = `
+        <div class="ct-card">
+          <div class="ct-spinner">
+            <div class="ct-spinner-ring"></div>
+            <div class="ct-spinner-lock">🔒</div>
+          </div>
+          <div class="ct-title">Preparando tu pago seguro</div>
+          <div class="ct-steps">
+            <div class="ct-step ct-step-1">
+              <span class="ct-check">✓</span>
+              <span>Datos validados</span>
+            </div>
+            <div class="ct-step ct-step-2">
+              <span class="ct-check">✓</span>
+              <span>Conexión cifrada SSL</span>
+            </div>
+            <div class="ct-step ct-step-3">
+              <span class="ct-check">✓</span>
+              <span>Conectando con Hotmart...</span>
+            </div>
+          </div>
+          <div class="ct-footer">
+            <img src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23C9A84C\'><path d=\'M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77l-6.18 3.25L7 13.14 2 8.27l6.91-1.01L12 1z\'/></svg>" alt="" class="ct-badge-icon">
+            <span>Procesado por <strong>Hotmart</strong> — plataforma segura usada por 500.000+ negocios</span>
+          </div>
+        </div>
+      `;
+      document.body.appendChild(overlay);
+
+      // Animar os checks sequencialmente
+      setTimeout(function(){ overlay.querySelector(".ct-step-1").classList.add("done"); }, 200);
+      setTimeout(function(){ overlay.querySelector(".ct-step-2").classList.add("done"); }, 600);
+      setTimeout(function(){ overlay.querySelector(".ct-step-3").classList.add("done"); }, 1000);
+    }
+
     document.getElementById("btn-checkout").addEventListener("click", (ev) => {
       ev.preventDefault();
 
@@ -1549,14 +1594,15 @@
         }
       } catch (e) {}
 
-      // ── DELAY AUMENTADO: pixel precisa de tempo para flushar ──
-      // Mínimo 900ms em conexão 4G — o fbq dispara o request em ~300-700ms
-      // dependendo se o script do Facebook já estava carregado.
-      // Trade-off aceitável: 900ms vs evento perdido.
+      // ── TELA DE TRANSIÇÃO "PREPARANDO TU PAGO" ──────────────
+      // Prepara mentalmente o lead para o redirect (evita estranhamento
+      // ao ver pay.hotmart.com na barra de endereço) + dá tempo para o
+      // Pixel do Meta disparar antes da navegação.
+      showCheckoutTransition();
       setTimeout(function () {
         try { clearProgress(); } catch(e){}
         window.location.href = checkoutUrl;
-      }, 900);
+      }, 1400);
     });
     startPricingTimer();
   }
