@@ -12,6 +12,48 @@
 (function () {
   "use strict";
 
+// ═══════════════════════════════════════════════════════════════
+// CLIENT-SIDE TRACKING DISABLED — server-side será implementado externamente.
+// Stubs no-op para preservar todas as chamadas existentes sem quebrar o código.
+// Quando o GTM Server estiver pronto, basta substituir o corpo de cada stub
+// por dataLayer.push({...}) ou fetch('/server-event', {...}).
+// ═══════════════════════════════════════════════════════════════
+window.vortxTrack          = window.vortxTrack          || function(){};
+window.vortxTrackSync      = window.vortxTrackSync      || function(){ return null; };
+window.vortxEnsureTracking = window.vortxEnsureTracking || function(){};
+window.vortxGetAttribution = window.vortxGetAttribution || function(){
+  // Mantém a captura de fbclid/utm para URL do checkout (atribuição funciona sem pixel)
+  try {
+    var p = {};
+    var url = new URLSearchParams(window.location.search);
+    var fbclid = url.get("fbclid") || sessionStorage.getItem("vx_fbclid");
+    if (fbclid) {
+      sessionStorage.setItem("vx_fbclid", fbclid);
+      p.fbclid = fbclid;
+    }
+    ["utm_source","utm_medium","utm_campaign","utm_content","utm_term"].forEach(function(k){
+      var v = url.get(k) || sessionStorage.getItem("vx_" + k);
+      if (v) { sessionStorage.setItem("vx_" + k, v); p[k] = v; }
+    });
+    return p;
+  } catch(e){ return {}; }
+};
+window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage || function(){
+  // Continua validando acesso direto às thank-you pages (independente de pixel)
+  try {
+    var params = new URLSearchParams(window.location.search);
+    if ((params.get("hottok")||"").length >= 8) return true;
+    if (/^HP[A-Z0-9]{6,}/i.test(params.get("transaction")||"")) return true;
+    if (params.get("src") === "vortx_funnel") return true;
+    var ref = document.referrer || "";
+    if (/pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(ref)) return true;
+    if (ref.indexOf(location.origin) === 0) return true;
+    return false;
+  } catch(e){ return false; }
+};
+
+
+
   // ── STATE ─────────────────────────────────────────────────
   const state = {
     exitIntentShown: false,

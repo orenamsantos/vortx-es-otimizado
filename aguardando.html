@@ -28,7 +28,6 @@
   }
 })();
 </script>
-<!-- Meta Pixel: inicializado pelo tracking.js -->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>VORTX — Pago en Proceso</title>
@@ -451,6 +450,7 @@ body::before {
 .btn-copy:hover { background: var(--gold-sub); }
 .btn-copy.copied { color: #4CAF6A; border-color: rgba(76,175,106,.4); }
 </style>
+  <script defer src="js/tracking-stub.min.js"></script>
 </head>
 <body>
 <div class="page">
@@ -593,8 +593,6 @@ body::before {
 </div>
 
 <!-- Tracking -->
-<script>window.vortxTrack=function(e,p){(window._vtq=window._vtq||[]).push({e:e,p:p||{}})};(window.requestIdleCallback||function(c){setTimeout(c,2000)})(function(){var s=document.createElement("script");s.src="js/tracking.min.js";document.body.appendChild(s)})</script>
-
 <script>
 (function () {
   var p    = new URLSearchParams(window.location.search);

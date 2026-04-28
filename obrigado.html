@@ -28,7 +28,6 @@
   }
 })();
 </script>
-<!-- Meta Pixel: inicializado pelo tracking.js — NÃO duplicar aqui -->
 <!-- Purchase: enviado APENAS pela Hotmart CAPI (server-side). -->
 <!-- Aqui disparamos purchase_confirmed (evento custom) para não duplicar. -->
 <meta charset="UTF-8">
@@ -129,8 +128,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 .d1{animation-delay:.1s}.d2{animation-delay:.2s}.d3{animation-delay:.3s}.d4{animation-delay:.4s}.d5{animation-delay:.5s}.d6{animation-delay:.6s}.d7{animation-delay:.7s}.d8{animation-delay:.8s}.d9{animation-delay:.9s}
 @media(max-width:479px){.ingredients-grid{grid-template-columns:1fr}}
 </style>
-  <script>window.vortxTrack=function(e,p){(window._vtq=window._vtq||[]).push({e:e,p:p||{}})};(window.requestIdleCallback||function(c){setTimeout(c,2000)})(function(){var s=document.createElement("script");s.src="js/tracking.min.js";document.body.appendChild(s)})</script>
-  
+    <script defer src="js/tracking-stub.min.js"></script>
 </head>
 <body>
 <div class="page">
