@@ -1,9 +1,12 @@
-// VORTX tracking stub v1 — client-side disabled, server-side handles all events.
-// All vortx* functions are no-ops. Only fbclid/utm capture and access guard remain.
+// VORTX tracking layer — pushes events to dataLayer for GTM Server (Stape).
+// All vortx* functions now feed the GTM container; tags configured server-side.
 (function(){
 "use strict";
 
-// Captura fbclid/utm no primeiro load (necessário para checkout URL)
+// dataLayer pode já ter sido inicializado pelo snippet GTM no <head>.
+window.dataLayer = window.dataLayer || [];
+
+// ── Captura fbclid/utm para usar na URL do checkout ──────────
 try {
   var url = new URLSearchParams(window.location.search);
   var fbclid = url.get("fbclid");
@@ -17,12 +20,43 @@ try {
   });
 } catch(e){}
 
-// No-op stubs
-window.vortxTrack          = function(){};
-window.vortxTrackSync      = function(){ return null; };
+// ── event_id para dedupe entre browser e server ─────────────
+function generateEventId(eventName){
+  return eventName + "_" + Date.now() + "_" + Math.random().toString(36).substr(2,9);
+}
+
+// ── vortxTrack: push para dataLayer (assíncrono) ─────────────
+window.vortxTrack = function(eventName, params){
+  try {
+    params = params || {};
+    var eventId = params._eventId || generateEventId(eventName);
+    window.dataLayer.push(Object.assign({
+      event: eventName,
+      event_id: eventId,
+      attribution: window.vortxGetAttribution()
+    }, params));
+  } catch(e){}
+};
+
+// ── vortxTrackSync: push síncrono + retorna event_id ────────
+// Usado no click do checkout para dedupe com Hotmart CAPI server-side
+window.vortxTrackSync = function(eventName, params){
+  try {
+    params = params || {};
+    var eventId = params._eventId || generateEventId(eventName);
+    window.dataLayer.push(Object.assign({
+      event: eventName,
+      event_id: eventId,
+      attribution: window.vortxGetAttribution()
+    }, params));
+    return eventId;
+  } catch(e){ return null; }
+};
+
+// ── Compatibilidade: pixels não existem mais, então no-op ───
 window.vortxEnsureTracking = function(){};
 
-// Atribuição (server-side vai consumir isso)
+// ── Atribuição: lida pela URL do checkout para anexar parâmetros ──
 window.vortxGetAttribution = function(){
   try {
     var p = {};
@@ -38,7 +72,7 @@ window.vortxGetAttribution = function(){
   } catch(e){ return {}; }
 };
 
-// Guard contra acesso direto às thank-you pages
+// ── Guard contra acesso direto às thank-you pages ───────────
 window.vortxIsLegitimateConversionPage = function(){
   try {
     var params = new URLSearchParams(window.location.search);
