@@ -1520,7 +1520,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
       </div>
 
       <div class="checkout-cta-block">
-        <button class="btn-cta btn-cta--checkout" id="btn-checkout">${buildCheckoutCta(state.selectedPlan)}</button>
+        <a href="https://pay.hotmart.com/U105461265V?checkoutMode=10" class="btn-cta btn-cta--checkout" id="btn-checkout" rel="noopener">${buildCheckoutCta(state.selectedPlan)}</a>
         <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía del DOBLE — 30 días</p>
         <div class="payment-methods">
           ${PRICING_DATA.paymentMethods.map((m) => `<span class="payment-method">${m}</span>`).join("")}
@@ -1809,6 +1809,8 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
       // Prepara mentalmente o lead para o redirect (evita estranhamento
       // ao ver pay.hotmart.com na barra de endereço) + dá tempo para o
       // Pixel do Meta disparar antes da navegação.
+      // Atualiza href do <a> para que GTM detecte navegação correta como gtm.linkClick
+      try { ev.target.closest("a").setAttribute("href", checkoutUrl); } catch(_) {}
       showCheckoutTransition();
       setTimeout(function () {
         try { clearProgress(); } catch(e){}
