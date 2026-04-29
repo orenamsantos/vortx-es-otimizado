@@ -1784,9 +1784,16 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
       var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + selectedPlan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
 
-      // Atribuição Meta Ads (fbclid, fbp, fbc) + UTMs
-      // Hotmart lê fbclid nativamente; fbp/fbc aparecem no xcod/sck para CAPI
+      // Atribuição Meta Ads (fbclid, fbp, fbc) + sck único + UTMs
+      // sck é a chave única por visitante, gerada em tracking-stub.js
+      // e incluída automaticamente no dataLayer.push de begin_checkout.
+      // Cruza dados client-side (Stape Store, gravado pela Tag BD InitiateCheckout)
+      // com o webhook server-side da Hotmart.
       try {
+        // sck único por visitante (mesmo que vai no dataLayer do begin_checkout)
+        var sck = window.vortxGetOrCreateSck ? window.vortxGetOrCreateSck() : null;
+        if (sck) checkoutUrl += "&sck=" + encodeURIComponent(sck);
+
         if (window.vortxGetAttribution) {
           var attr = window.vortxGetAttribution();
           // fbclid é o parâmetro que a Hotmart reconhece nativamente
@@ -1799,8 +1806,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
           if (xcodParts.length) {
             checkoutUrl += "&xcod=" + encodeURIComponent(xcodParts.join("|"));
           }
-          // UTMs (Hotmart também lê sck/src)
-          if (attr.utm_source)   checkoutUrl += "&sck=" + encodeURIComponent(attr.utm_source);
+          // src recebe utm_campaign (campo separado do sck, não conflita)
           if (attr.utm_campaign) checkoutUrl += "&src=" + encodeURIComponent(attr.utm_campaign);
         }
       } catch (e) {}

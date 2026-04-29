@@ -20,12 +20,43 @@ try {
   });
 } catch(e){}
 
+// ── Geração de sck único por visitante ──────────────────────
+// Formato: latam_<timestamp_base36>_<random>
+// Ex: latam_kk2zr8w_a3f9k2m1xq2bz
+// Persistido em sessionStorage durante toda a jornada do funil (quiz → checkout).
+// É a chave que cruza dados client-side (gravados via Tag Stape Store Writer
+// no evento begin_checkout) com o webhook server-side da Hotmart.
+function generateSck(){
+  var ts = Date.now().toString(36);
+  var rnd = Math.random().toString(36).substr(2, 9);
+  var rnd2 = Math.random().toString(36).substr(2, 4);
+  return "latam_" + ts + "_" + rnd + rnd2;
+}
+
+window.vortxGetOrCreateSck = function(){
+  try {
+    var existing = sessionStorage.getItem("vx_sck");
+    if (existing) return existing;
+    var sck = generateSck();
+    sessionStorage.setItem("vx_sck", sck);
+    return sck;
+  } catch(e){
+    if (!window.__vx_sck_fallback) window.__vx_sck_fallback = generateSck();
+    return window.__vx_sck_fallback;
+  }
+};
+
+// Garante que o sck é gerado o quanto antes (pra estar pronto no PageView).
+try { window.vortxGetOrCreateSck(); } catch(e){}
+
 // ── event_id para dedupe entre browser e server ─────────────
 function generateEventId(eventName){
   return eventName + "_" + Date.now() + "_" + Math.random().toString(36).substr(2,9);
 }
 
 // ── vortxTrack: push para dataLayer (assíncrono) ─────────────
+// O sck vai junto no push, então qualquer Tag GA4/Stape Store Writer
+// que leia {{ed - sck}} pega automaticamente.
 window.vortxTrack = function(eventName, params){
   try {
     params = params || {};
@@ -33,13 +64,16 @@ window.vortxTrack = function(eventName, params){
     window.dataLayer.push(Object.assign({
       event: eventName,
       event_id: eventId,
+      sck: window.vortxGetOrCreateSck(),
       attribution: window.vortxGetAttribution()
     }, params));
   } catch(e){}
 };
 
 // ── vortxTrackSync: push síncrono + retorna event_id ────────
-// Usado no click do checkout para dedupe com Hotmart CAPI server-side
+// Usado no click do checkout para dedupe com Hotmart CAPI server-side.
+// Crítico: dispara begin_checkout → GA4 → Stape Store grava { sck → fbc, fbp, ip, ... }
+// ANTES do redirect pro Hotmart. Webhook chega depois com mesmo sck → lookup funciona.
 window.vortxTrackSync = function(eventName, params){
   try {
     params = params || {};
@@ -47,6 +81,7 @@ window.vortxTrackSync = function(eventName, params){
     window.dataLayer.push(Object.assign({
       event: eventName,
       event_id: eventId,
+      sck: window.vortxGetOrCreateSck(),
       attribution: window.vortxGetAttribution()
     }, params));
     return eventId;
