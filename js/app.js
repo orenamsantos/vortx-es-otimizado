@@ -203,11 +203,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
 
   // ── RENDER GATE ───────────────────────────────────────────
   function renderGate() {
-    var gate = document.getElementById("gate");
-    // Skip re-render quando o gate já foi pintado pelo HTML estático (mesmo conteúdo de GATE_DATA).
-    // Evita repaint/CLS desnecessário durante o boot lazy do engine.
-    if (gate && gate.querySelector("#btn-start") && gate.querySelector(".gate-headline")) return;
-    gate.innerHTML = `
+    document.getElementById("gate").innerHTML = `
       <div class="gate-logo">VORTX<span></span></div>
       <div class="gate-badge">${GATE_DATA.badge}</div>
       <h1 class="gate-headline">${GATE_DATA.headline}</h1>
@@ -1912,10 +1908,5 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
   }
 
   // ── INIT ──────────────────────────────────────────────────
-  // Auto-roda init() mesmo quando o script é carregado lazy (depois do DOMContentLoaded).
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
-  }
+  document.addEventListener("DOMContentLoaded", init);
 })();

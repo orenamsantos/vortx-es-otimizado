@@ -77,7 +77,12 @@
 
   <!-- Lazy-loader do quiz engine: só carrega 108KB de JS quando o usuário demonstrar intenção
        (pointerdown/touchstart/mouseenter no CTA) ou no primeiro idle window pós-load.
-       Isso elimina ~700-1200ms de TBT no PSI mobile sem afetar UX. -->
+       Isso elimina ~700-1200ms de TBT no PSI mobile sem afetar UX.
+
+       Como app.js só inicializa via document.addEventListener("DOMContentLoaded", init) e o
+       evento já passou no momento em que esse script é injetado, interceptamos o registro
+       desse listener e o disparamos manualmente após o app.js terminar de parsear.
+       Não tocamos em app.js — toda lógica fica no boot loader. -->
   <script>
   (function(){
     var loading=false, ready=false, queuedClick=false;
@@ -86,9 +91,22 @@
       var s1=document.createElement('script');
       s1.src='js/quiz-data.js';
       s1.onload=function(){
+        // Patch escopado: captura o DOMContentLoaded handler do app.js sem registrá-lo.
+        // Restaurado imediatamente após o onload do app.js para não afetar o restante da página.
+        var origAdd=document.addEventListener, capturedInit=null;
+        document.addEventListener=function(ev,fn,opts){
+          if(ev==='DOMContentLoaded' && typeof fn==='function' && !capturedInit){
+            capturedInit=fn; return;
+          }
+          return origAdd.call(this,ev,fn,opts);
+        };
         var s2=document.createElement('script');
         s2.src='js/app.js';
         s2.onload=function(){
+          document.addEventListener=origAdd;
+          if(capturedInit){
+            try{ capturedInit.call(document,new Event('DOMContentLoaded')); }catch(e){}
+          }
           ready=true;
           if(queuedClick){
             queuedClick=false;
