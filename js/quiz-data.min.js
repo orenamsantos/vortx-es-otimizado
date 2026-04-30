@@ -277,91 +277,91 @@ PROTOCOL_DATA={
 TESTIMONIALS=[
   {
     initials:"César M.",age:52,occupation:"Dueño de Constructora, Ciudad de México",
-    photo:"https://i.pravatar.cc/80?img=70",
+    photo:"img/testimonials/cesar-m.jpg",
     text:"15 días de protocolo y mi esposa me preguntó qué diablos estaba tomando. Volví a funcionar como si tuviera 30.",
     result:"Funcionó en 15 días",highlight:"+ Tamaño y firmeza restaurados",
     painTags:["parceira","tudo","confianza"]
   },
   {
     initials:"Roberto Q.",age:44,occupation:"Inversionista, Bogotá",
-    photo:"https://i.pravatar.cc/80?img=69",
+    photo:"img/testimonials/roberto-q.jpg",
     text:"Mi pene había encogido y terminaba en 2 minutos. Era vascular — el protocolo me devolvió centímetros y control total.",
     result:"Tamaño y duración de vuelta",highlight:"+ Control total restaurado",
     painTags:["parceira","eu_mesmo","tudo"]
   },
   {
     initials:"Sergio O.",age:60,occupation:"Ex-Militar, Guadalajara",
-    photo:"https://i.pravatar.cc/80?img=66",
+    photo:"img/testimonials/sergio-o.jpg",
     text:"60 años. Dependía de la pastilla. Hoy amanezco con erección fuerte, sin necesitar nada. El tamaño volvió a mis 40.",
     result:"Sin pastilla a los 60 años",highlight:"+ Vasos reabiertos naturalmente",
     painTags:["parceira","eu_mesmo","tudo"]
   },
   {
     initials:"Marcos T.",age:48,occupation:"Camionero, Monterrey",
-    photo:"https://i.pravatar.cc/80?img=65",
+    photo:"img/testimonials/marcos-t.jpg",
     text:"3 semanas de protocolo y mi esposa volvió al cuarto. Hoy aguanto toda la noche.",
     result:"Duración triplicada",highlight:"+ Energía restaurada",
     painTags:["parceira","tudo"]
   },
   {
     initials:"Ricardo F.",age:55,occupation:"Abogado, Medellín",
-    photo:"https://i.pravatar.cc/80?img=64",
+    photo:"img/testimonials/ricardo-f.jpg",
     text:"Terminaba en 1 minuto. Hoy controlo cuándo quiero y mi esposa pide más.",
     result:"De 1 minuto a 40+",highlight:"+ Control de eyaculación",
     painTags:["eu_mesmo","parceira","tudo"]
   },
   {
     initials:"Pablo S.",age:41,occupation:"Empresario, Ciudad de México",
-    photo:"https://i.pravatar.cc/80?img=63",
+    photo:"img/testimonials/pablo-s.jpg",
     text:"60 días: la barriga se fue, el pecho desapareció y el tamaño volvió visiblemente. Mi esposa no lo podía creer.",
     result:"Cuerpo y tamaño restaurados",highlight:"+ Estrógeno eliminado",
     painTags:["eu_mesmo","tudo","confianza"]
   },
   {
     initials:"Andrés L.",age:49,occupation:"Ingeniero, Cali",
-    photo:"https://i.pravatar.cc/80?img=55",
+    photo:"img/testimonials/andres-l.jpg",
     text:"30 días de protocolo: mi esposa me miró y dijo '¿qué te pasó?'. Volví a ser yo.",
     result:"Reversión en 30 días",highlight:"+ Circulación reabierta",
     painTags:["eu_mesmo","parceira","tudo","confianza"]
   },
   {
     initials:"Felipe R.",age:53,occupation:"Médico, Lima",
-    photo:"https://i.pravatar.cc/80?img=52",
+    photo:"img/testimonials/felipe-r.jpg",
     text:"Soy médico y no podía resolver mi propio problema. Este protocolo hizo lo que 5 años de consultas no lograron.",
     result:"Funcionó donde la medicina falló",highlight:"+ Enfoque vascular comprobado",
     painTags:["eu_mesmo","parceira","tudo"]
   },
   {
     initials:"Jonathan P.",age:46,occupation:"Profesor, Buenos Aires",
-    photo:"https://i.pravatar.cc/80?img=18",
+    photo:"img/testimonials/jonathan-p.jpg",
     text:"El protocolo abrió los vasos y la sangre volvió con presión. Mi pareja lo notó en la primera semana.",
     result:"Resultado visible en 7 días",highlight:"+ Flujo restaurado",
     painTags:["parceira","tudo"]
   },
   {
     initials:"Gilberto A.",age:58,occupation:"Empresario, Santiago",
-    photo:"https://i.pravatar.cc/80?img=17",
+    photo:"img/testimonials/gilberto-a.jpg",
     text:"3 semanas: duro como toro, duración que ella nunca había visto. No quiere salir de la cama.",
     result:"Firmeza y duración de toro",highlight:"+ Rendimiento total",
     painTags:["parceira","eu_mesmo","tudo"]
   },
   {
     initials:"Carlos V.",age:43,occupation:"Policía, Ciudad de México",
-    photo:"https://i.pravatar.cc/80?img=11",
+    photo:"img/testimonials/carlos-v.jpg",
     text:"Antes terminaba antes de empezar. Hoy controlo y duro lo que quiero. VORTX salvó mi matrimonio.",
     result:"Eyaculación bajo control",highlight:"+ Rendimiento restaurado",
     painTags:["eu_mesmo","tudo","confianza"]
   },
   {
     initials:"Daniel M.",age:37,occupation:"Desarrollador, Bogotá",
-    photo:"https://i.pravatar.cc/80?img=12",
+    photo:"img/testimonials/daniel-m.jpg",
     text:"Tenía 37 y creía que era demasiado joven para esto. 3 semanas y la firmeza volvió con fuerza total.",
     result:"Revertido a los 37",highlight:"+ Vasos reabiertos a tiempo",
     painTags:["eu_mesmo","tudo","confianza"]
   },
   {
     initials:"Héctor M.",age:61,occupation:"Jubilado, Guadalajara",
-    photo:"https://i.pravatar.cc/80?img=3",
+    photo:"img/testimonials/hector-m.jpg",
     text:"61 años. 5 años sin funcionar. 3 semanas de protocolo — volví con tamaño, firmeza y duración. Ella lloró.",
     result:"Revertió todo a los 61",highlight:"+ 5 años de daño revertidos",
     painTags:["parceira","eu_mesmo","tudo"]
