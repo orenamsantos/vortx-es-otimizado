@@ -42,11 +42,11 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
   // Continua validando acesso direto às thank-you pages (independente de pixel)
   try {
     var params = new URLSearchParams(window.location.search);
-    if ((params.get("hottok")||"").length >= 8) return true;
+    // (hottok removido — migrado para PerfectPay)
     if (/^HP[A-Z0-9]{6,}/i.test(params.get("transaction")||"")) return true;
     if (params.get("src") === "vortx_funnel") return true;
     var ref = document.referrer || "";
-    if (/pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(ref)) return true;
+    if (/go\.centerpag\.com|app\.perfectpay\.com\.br|perfectpay\.com\.br/i.test(ref)) return true;
     if (ref.indexOf(location.origin) === 0) return true;
     return false;
   } catch(e){ return false; }
@@ -1520,7 +1520,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
       </div>
 
       <div class="checkout-cta-block">
-        <a href="https://pay.hotmart.com/U105461265V?checkoutMode=10" class="btn-cta btn-cta--checkout" id="btn-checkout" rel="noopener">${buildCheckoutCta(state.selectedPlan)}</a>
+        <a href="https://go.centerpag.com/PPU38CQBBL7" class="btn-cta btn-cta--checkout" id="btn-checkout" rel="noopener">${buildCheckoutCta(state.selectedPlan)}</a>
         <p class="checkout-sub">Acceso inmediato • Sin suscripción oculta • Garantía del DOBLE — 30 días</p>
         <div class="payment-methods">
           ${PRICING_DATA.paymentMethods.map((m) => `<span class="payment-method">${m}</span>`).join("")}
@@ -1710,7 +1710,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
     }
 
     // ── CHECKOUT TRANSITION SCREEN ────────────────────────────
-    // Tela de preparação mental antes do redirect para Hotmart
+    // Tela de preparação mental antes do redirect para PerfectPay
     function showCheckoutTransition() {
       var existing = document.getElementById("checkout-transition");
       if (existing) return;
@@ -1736,12 +1736,12 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
             </div>
             <div class="ct-step ct-step-3">
               <span class="ct-check">✓</span>
-              <span>Conectando con Hotmart...</span>
+              <span>Conectando con PerfectPay...</span>
             </div>
           </div>
           <div class="ct-footer">
             <img src="data:image/svg+xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\' viewBox=\'0 0 24 24\' fill=\'%23C9A84C\'><path d=\'M12 1l3.09 6.26L22 8.27l-5 4.87 1.18 6.88L12 16.77l-6.18 3.25L7 13.14 2 8.27l6.91-1.01L12 1z\'/></svg>" alt="" class="ct-badge-icon">
-            <span>Procesado por <strong>Hotmart</strong> — plataforma segura usada por 500.000+ negocios</span>
+            <span>Procesado por <strong>PerfectPay</strong> — plataforma 100% segura</span>
           </div>
         </div>
       `;
@@ -1762,7 +1762,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
 
       // ── DISPARO SÍNCRONO DO InitiateCheckout ──────────────────
       // vortxTrackSync força load do pixel E dispara fbq imediatamente.
-      // Retorna o event_id — fundamental para desduplicar com a Hotmart CAPI.
+      // Retorna o event_id para rastreamento.
       var eventId = null;
       if (window.vortxTrackSync) {
         eventId = window.vortxTrackSync("begin_checkout", {
@@ -1778,17 +1778,15 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
       // ── MONTAGEM DA URL COM ATRIBUIÇÃO ─────────────────────────
       // Parâmetros nativos do quiz
       var userName = encodeURIComponent(state.userData.name || "");
-      var baseUrl  = selectedPlan === "esencial"
-        ? "https://pay.hotmart.com/U105461265V?off=tjhgh4hs&checkoutMode=10"
-        : "https://pay.hotmart.com/U105461265V?checkoutMode=10";
-      var checkoutUrl = baseUrl + "&name=" + userName + "&plan=" + selectedPlan + "&value=" + price;
+      var baseUrl  = "https://go.centerpag.com/PPU38CQBBL7";
+      var checkoutUrl = baseUrl + "?name=" + userName + "&plan=" + selectedPlan + "&value=" + price;
       if (state.userData.whatsapp) checkoutUrl += "&phonenumber=" + encodeURIComponent(state.userData.whatsapp);
 
       // Atribuição Meta Ads (fbclid, fbp, fbc) + sck único + UTMs
       // sck é a chave única por visitante, gerada em tracking-stub.js
       // e incluída automaticamente no dataLayer.push de begin_checkout.
       // Cruza dados client-side (Stape Store, gravado pela Tag BD InitiateCheckout)
-      // com o webhook server-side da Hotmart.
+      // com o webhook server-side da PerfectPay.
       try {
         // sck único por visitante (mesmo que vai no dataLayer do begin_checkout)
         var sck = window.vortxGetOrCreateSck ? window.vortxGetOrCreateSck() : null;
@@ -1796,16 +1794,12 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
 
         if (window.vortxGetAttribution) {
           var attr = window.vortxGetAttribution();
-          // fbclid é o parâmetro que a Hotmart reconhece nativamente
+          // fbclid — parâmetro de atribuição Meta Ads
           if (attr.fbclid) checkoutUrl += "&fbclid=" + encodeURIComponent(attr.fbclid);
-          // Passamos fbp/fbc + event_id dentro de xcod (string arbitrária que volta no postback)
-          var xcodParts = [];
-          if (eventId)   xcodParts.push("eid=" + eventId);
-          if (attr.fbp)  xcodParts.push("fbp=" + attr.fbp);
-          if (attr.fbc)  xcodParts.push("fbc=" + attr.fbc);
-          if (xcodParts.length) {
-            checkoutUrl += "&xcod=" + encodeURIComponent(xcodParts.join("|"));
-          }
+          // fbp/fbc passados como params diretos
+          if (attr.fbp) checkoutUrl += "&fbp=" + encodeURIComponent(attr.fbp);
+          if (attr.fbc) checkoutUrl += "&fbc=" + encodeURIComponent(attr.fbc);
+          if (eventId)  checkoutUrl += "&eid=" + encodeURIComponent(eventId);
           // src recebe utm_campaign (campo separado do sck, não conflita)
           if (attr.utm_campaign) checkoutUrl += "&src=" + encodeURIComponent(attr.utm_campaign);
         }
@@ -1813,7 +1807,7 @@ window.vortxIsLegitimateConversionPage = window.vortxIsLegitimateConversionPage 
 
       // ── TELA DE TRANSIÇÃO "PREPARANDO TU PAGO" ──────────────
       // Prepara mentalmente o lead para o redirect (evita estranhamento
-      // ao ver pay.hotmart.com na barra de endereço) + dá tempo para o
+      // ao ver go.centerpag.com na barra de endereço) + dá tempo para o
       // Pixel do Meta disparar antes da navegação.
       // Atualiza href do <a> para que GTM detecte navegação correta como gtm.linkClick
       try { ev.target.closest("a").setAttribute("href", checkoutUrl); } catch(_) {}

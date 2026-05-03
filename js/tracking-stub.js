@@ -25,7 +25,7 @@ try {
 // Ex: latam_kk2zr8w_a3f9k2m1xq2bz
 // Persistido em sessionStorage durante toda a jornada do funil (quiz → checkout).
 // É a chave que cruza dados client-side (gravados via Tag Stape Store Writer
-// no evento begin_checkout) com o webhook server-side da Hotmart.
+// no evento begin_checkout) com o webhook server-side da PerfectPay.
 function generateSck(){
   var ts = Date.now().toString(36);
   var rnd = Math.random().toString(36).substr(2, 9);
@@ -115,7 +115,7 @@ window.vortxIsLegitimateConversionPage = function(){
     if (/^HP[A-Z0-9]{6,}/i.test(params.get("transaction")||"")) return true;
     if (params.get("src") === "vortx_funnel") return true;
     var ref = document.referrer || "";
-    if (/pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(ref)) return true;
+    if (/go\.centerpag\.com|app\.perfectpay\.com\.br|perfectpay\.com\.br/i.test(ref)) return true;
     if (ref.indexOf(location.origin) === 0) return true;
     return false;
   } catch(e){ return false; }

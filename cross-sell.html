@@ -6,23 +6,19 @@
 <!-- End Google Tag Manager -->
 <script>
 (function(){
-  // VORTX Access Guard v1 — bloqueia acesso direto às thank-you pages
-  // Aceita: ?hottok=XXX | ?transaction=HPXXX | ?src=vortx_funnel | referer hotmart
+  // VORTX Access Guard v2 — bloqueia acesso direto às thank-you pages
+  // Aceita: ?src=vortx_funnel | referer PerfectPay/CenterPag | referer próprio site
   try {
     var params   = new URLSearchParams(window.location.search);
-    var hottok   = params.get('hottok')      || '';
-    var trans    = params.get('transaction') || '';
-    var src      = params.get('src')         || '';
-    var referer  = document.referrer         || '';
+    var src      = params.get('src') || '';
+    var referer  = document.referrer || '';
 
     // Validações aceitas (em ordem de prioridade)
-    var validTok   = hottok.length >= 8;                                      // Token Hotmart
-    var validTrans = /^HP[A-Z0-9]{6,}/i.test(trans);                          // Transaction Hotmart
-    var validSrc   = src === 'vortx_funnel';                                  // Navegação interna (upsell→crosssell→downsell→acesso)
-    var fromHot    = /pay\.hotmart\.com|checkout\.hotmart\.com|hotmart\.com/i.test(referer);
-    var fromSelf   = referer.indexOf(location.origin) === 0;                  // Navegação dentro do próprio site
+    var validSrc    = src === 'vortx_funnel';                                       // Navegação interna
+    var fromPerfect = /go\.centerpag\.com|app\.perfectpay\.com\.br|perfectpay\.com\.br/i.test(referer); // PerfectPay
+    var fromSelf    = referer.indexOf(location.origin) === 0;                       // Navegação dentro do próprio site
 
-    if (!validTok && !validTrans && !validSrc && !fromHot && !fromSelf) {
+    if (!validSrc && !fromPerfect && !fromSelf) {
       // Acesso direto não autorizado — redireciona para home
       window.location.replace('/');
     }
@@ -209,7 +205,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
   <!-- CTA -->
   <div class="fade-up d6">
-    <a href="acesso.html?src=vortx_funnel" class="btn" id="btn-cross" rel="noopener">AÑADIR IGNICIÓN AL STACK<span class="btn-price">$ 14</span></a>
+    <a href="https://go.centerpag.com/PPU38CQBBOT?upsell=true" class="btn" id="btn-cross" rel="noopener">AÑADIR IGNICIÓN AL STACK<span class="btn-price">$ 14</span></a>
     <p class="btn-sub">Se suma a tu pedido • Activación vascular nocturna • Garantía 30 días</p>
     <a href="acesso.html?src=vortx_funnel" class="btn-skip" id="btn-skip-final" rel="noopener">Completar pedido sin Ignición →</a>
   </div>
@@ -247,7 +243,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
     e.preventDefault();
     // TODO: processar pagamento do Ignición, depois redirecionar
     if(window.vortxTrack) vortxTrack('crosssell_accept',{value:14,currency:'USD',product:'protocolo_ignicion'});
-    window.location.href = 'acesso.html?src=vortx_funnel' + (n ? '&name=' + encodeURIComponent(n) : '');
+    window.location.href = 'https://go.centerpag.com/PPU38CQBBOT?upsell=true' + (n ? '&name=' + encodeURIComponent(n) : '');
   });
 
   document.getElementById('btn-skip-final').addEventListener('click', function(){
@@ -257,13 +253,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 })();
 </script>
 
-<!-- HOTMART - Sales Funnel Widget -->
-<div id="hotmart-sales-funnel"></div>
-<script src="https://checkout.hotmart.com/lib/hotmart-checkout-elements.js"></script>
-<script>
-checkoutElements.init('salesFunnel').mount('#hotmart-sales-funnel')
-</script>
-<!-- HOTMART - Sales Funnel Widget -->
+
 
 </body>
 </html>
