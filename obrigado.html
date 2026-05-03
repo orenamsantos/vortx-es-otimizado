@@ -6,19 +6,21 @@
 <!-- End Google Tag Manager -->
 <script>
 (function(){
-  // VORTX Access Guard v2 — bloqueia acesso direto às thank-you pages
-  // Aceita: ?src=vortx_funnel | referer PerfectPay/CenterPag | referer próprio site
+  // VORTX Access Guard v3 — bloqueia acesso direto às thank-you pages
+  // Aceita: ?src=vortx_funnel | ?transaction_id=PPU... | referer CenterPag/PerfectPay | referer próprio site
   try {
     var params   = new URLSearchParams(window.location.search);
-    var src      = params.get('src') || '';
-    var referer  = document.referrer || '';
+    var src      = params.get('src')            || '';
+    var txid     = params.get('transaction_id') || '';
+    var referer  = document.referrer            || '';
 
     // Validações aceitas (em ordem de prioridade)
-    var validSrc    = src === 'vortx_funnel';                                       // Navegação interna
-    var fromPerfect = /go\.centerpag\.com|app\.perfectpay\.com\.br|perfectpay\.com\.br/i.test(referer); // PerfectPay
-    var fromSelf    = referer.indexOf(location.origin) === 0;                       // Navegação dentro do próprio site
+    var validSrc    = src === 'vortx_funnel';
+    var validTx     = txid.length >= 8;                                             // transaction_id da PerfectPay/CenterPag
+    var fromPerfect = /go\.centerpag\.com|app\.perfectpay\.com\.br|perfectpay\.com\.br/i.test(referer);
+    var fromSelf    = referer.indexOf(location.origin) === 0;
 
-    if (!validSrc && !fromPerfect && !fromSelf) {
+    if (!validSrc && !validTx && !fromPerfect && !fromSelf) {
       // Acesso direto não autorizado — redireciona para home
       window.location.replace('/');
     }
@@ -196,7 +198,7 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
       <p class="guarantee-text">Haz el suero, espera 2 horas y si el tamaño no aumenta visiblemente y la firmeza no vuelve con fuerza, pide reembolso. Sin preguntas, sin rodeos.</p>
     </div>
     <div class="fade-up d9">
-      <a href="cross-sell.html?soro=sim&src=vortx_funnel" class="btn" id="btn-upsell" rel="noopener">SÍ, ACELERAR MI PROTOCOLO A 7 DÍAS<span class="btn-price">$ 9</span></a>
+      <a href="https://go.centerpag.com/PPU38CQBBOO?upsell=true" class="btn" id="btn-upsell" rel="noopener">SÍ, ACELERAR MI PROTOCOLO A 7 DÍAS<span class="btn-price">$ 9</span></a>
       <p class="btn-sub">Se suma a tu pedido VORTX • Acceso inmediato • Garantía total</p>
       <a href="downsell.html?src=vortx_funnel" class="btn-skip" id="btn-skip" rel="noopener">No gracias, prefiero esperar 21 días →</a>
     </div>
@@ -223,9 +225,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellips
 
   document.getElementById('btn-upsell').addEventListener('click',function(e){
     e.preventDefault();
-    // TODO: processar pagamento do Soro, depois redirecionar
     if(window.vortxTrack) vortxTrack('upsell_accept',{value:9,currency:'USD',product:'soro_120'});
-    window.location.href='cross-sell.html?soro=sim&src=vortx_funnel'+(n?'&name='+encodeURIComponent(n):'');
+    window.location.href='https://go.centerpag.com/PPU38CQBBOO?upsell=true'+(n?'&name='+encodeURIComponent(n):'');
   });
   document.getElementById('btn-skip').addEventListener('click',function(){
     if(window.vortxTrack) vortxTrack('upsell_decline',{product:'soro_120'});
